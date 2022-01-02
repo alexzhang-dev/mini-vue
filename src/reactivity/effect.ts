@@ -6,7 +6,6 @@ class ReactiveEffect {
   run() {
     activeEffect = this
     this._fn()
-    activeEffect = null
   }
 }
 
