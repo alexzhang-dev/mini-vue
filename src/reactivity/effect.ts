@@ -12,13 +12,11 @@ class ReactiveEffect {
 const targetMap = new Map()
 
 export function track(target, key) {
-  // 去看一个 targetMap 中有没有某个属性的值
   let depsMap = targetMap.get(target)
   if (!depsMap) {
     depsMap = new Map()
     targetMap.set(target, depsMap)
   }
-  // 取依赖
   let dep = depsMap.get(key)
   if (!dep) {
     dep = new Set()
