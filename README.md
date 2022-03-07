@@ -12,5 +12,5 @@ I'm Alex aka zx
 
 目前已实现模块：
 
-- [x] reactive [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/reactive.spec.ts#L4)
-- [x] effect [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L5)
+- [x] reactive - [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/reactive.spec.ts#L4)
+- [x] effect - [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L5)
