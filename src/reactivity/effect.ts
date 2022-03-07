@@ -6,7 +6,9 @@ class ReactiveEffect {
   run() {
     // 保存一下当前的 activeEffect
     activeEffect = this
-    this._fn()
+    const res = this._fn()
+    // [runner] return 运行的值
+    return res
   }
 }
 
@@ -46,4 +48,7 @@ let activeEffect
 export function effect(fn) {
   const _effect = new ReactiveEffect(fn)
   _effect.run()
+  // [runner]: 在这里将 run 方法 return 出去
+  // 但是要注意 this 指向问题，所以可以 bind 后 return 出去
+  return _effect.run.bind(_effect)
 }
