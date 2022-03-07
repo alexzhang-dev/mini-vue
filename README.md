@@ -2,7 +2,7 @@
 
 Hi, there! 👋
 
-I'm Alex aka zx
+I'm Alex aka zx 👨‍💻 a frontend developer
 
 这是我关于崔大的 [mini-vue](https://github.com/cuixiaorui/mini-vue) 的个人实现
 
