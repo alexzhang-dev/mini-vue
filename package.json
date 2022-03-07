@@ -1,29 +1,29 @@
 {
-  "name": "vue-study",
+  "name": "mini-vue",
   "version": "1.0.0",
-  "description": "mini-vue by alex and cuixueshe",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexzhang1030/vue-study.git"
+    "url": "git+https://github.com/zx-projects/mini-vue.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/alexzhang1030/vue-study/issues"
+    "url": "https://github.com/zx-projects/mini-vue/issues"
   },
-  "homepage": "https://github.com/alexzhang1030/vue-study#readme",
+  "homepage": "https://github.com/zx-projects/mini-vue#readme",
   "devDependencies": {
-    "@babel/core": "^7.16.7",
-    "@babel/preset-env": "^7.16.7",
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "^7.16.7",
-    "@types/jest": "^27.4.0",
-    "babel-jest": "^27.4.5",
-    "jest": "^27.4.5",
-    "typescript": "^4.5.4"
+    "@types/jest": "^27.4.1",
+    "babel-jest": "^27.5.1",
+    "jest": "^27.5.1",
+    "typescript": "^4.6.2"
   }
 }
