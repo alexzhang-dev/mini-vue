@@ -14,5 +14,8 @@ As you can see, I'm a frontend developer.
 
 目前已实现模块：
 
-- [x] reactive - [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/reactive.spec.ts#L4)
-- [x] effect - [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L5)
+- reactive
+  - [x] [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/reactive.spec.ts#L4)
+- effect
+  - [x] [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L5)
+  - [x] [return runner](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L19)
