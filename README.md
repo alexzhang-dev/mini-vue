@@ -1,0 +1,16 @@
+# mini-vue
+
+Hi, there! 👋
+
+I'm Alex aka zx
+
+这是我关于崔大的 [mini-vue](https://github.com/cuixiaorui/mini-vue) 的个人实现
+
+[这个是配套的笔记](https://github.com/zx-projects/mini-vue-docs) 搭配起来食用更佳哟
+
+欢迎 star 哦
+
+目前已实现模块：
+
+- [x] reactive [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/reactive.spec.ts#L4)
+- [x] effect [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L5)
