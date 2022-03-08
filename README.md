@@ -19,3 +19,5 @@ As you can see, I'm a frontend developer.
 - effect
   - [x] [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L5)
   - [x] [return runner](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L19)
+  - [x] [scheduler](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L34)
+  - [x] [stop & onStop](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L62)
