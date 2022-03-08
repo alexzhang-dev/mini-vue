@@ -1,5 +1,10 @@
+import { extend } from '../shared/index'
+
 class ReactiveEffect {
   private _fn: any
+  // [stop] 反向记录自己对应的 dep 那个 set
+  deps = []
+  active = true
   // [scheduler] 构造函数加入 options，这里使用 public 可以供外部使用
   constructor(fn, public options) {
     this._fn = fn
@@ -10,6 +15,21 @@ class ReactiveEffect {
     const res = this._fn()
     // [runner] return 运行的值
     return res
+  }
+  // [stop] 这个方法的作用就是去根据 this.deps 删除 this 对应的 effect
+  stop() {
+    cleanupEffect(this)
+  }
+}
+
+function cleanupEffect(effect) {
+  if (effect.active) {
+    effect.deps.forEach((dep: any) => {
+      dep.delete(effect)
+    })
+    // [onStop] 如果存在 onStop，就去运行 onStop
+    if (effect.onStop) effect.onStop()
+    effect.active = false
   }
 }
 
@@ -31,7 +51,13 @@ export function track(target, key) {
     depsMap.set(key, dep)
   }
   // 将 effect 加入到 set 中
-  dep.add(activeEffect)
+  // [stop]：反向追踪 activeEffect 的 dep
+  // 因为一个 activeEffect 可能会对应多个 dep，每个 dep 是一个 set
+  // 这里我们可以使用一个数组
+  if (activeEffect && activeEffect.active) {
+    activeEffect.deps.push(dep)
+    dep.add(activeEffect)
+  }
 }
 
 export function trigger(target, key) {
@@ -48,14 +74,26 @@ export function trigger(target, key) {
   }
 }
 
+export function stop(runner) {
+  // [stop] 如何获取到当前所属的 effect 实例呢？
+  runner.effect.stop()
+}
+
 // 需要一个全局变量来保存当前的 effect
 let activeEffect
 
 export function effect(fn, options: any = {}) {
   // [scheduler]在创建 ReactiveEffect 实例的时候，保存一下 options
   const _effect = new ReactiveEffect(fn, options)
+  // [stop] 这里我们 options 会接收一个 onStop 方法
+  // 其实我们可以将 options 中的所有数据全部挂载在 effect 上面
+  // extend = Object.assign 封装一下是为了语义化更好
+  extend(_effect, options)
   _effect.run()
   // [runner]: 在这里将 run 方法 return 出去
   // 但是要注意 this 指向问题，所以可以 bind 后 return 出去
-  return _effect.run.bind(_effect)
+  const runner: any = _effect.run.bind(_effect)
+  // [stop] 在这里挂载一下所属的 effect
+  runner.effect = _effect
+  return runner
 }

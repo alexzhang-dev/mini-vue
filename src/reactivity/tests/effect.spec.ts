@@ -1,4 +1,4 @@
-import { effect } from '../effect'
+import { effect, stop } from '../effect'
 import { reactive } from '../reactive'
 
 describe('effect', () => {
@@ -58,5 +58,56 @@ describe('effect', () => {
     expect(dummy).toBe(1)
     run()
     expect(dummy).toBe(2)
+  })
+  it('stop', () => {
+    let dummy
+    const obj = reactive({ prop: 1 })
+    const runner = effect(() => {
+      dummy = obj.prop
+    })
+    obj.prop = 2
+    expect(dummy).toBe(2)
+    // stop 一个 runner 之后
+    stop(runner)
+    obj.prop++
+    // 依赖再次更新，当时传入的 effect 则不会重新执行
+    expect(dummy).toBe(2)
+    // runner 不受到影响
+    runner()
+    expect(dummy).toBe(3)
+  })
+
+  it('stop should not clean other effect', () => {
+    const foo = reactive({
+      foo: 1,
+    })
+    const bar = reactive({
+      bar: 2,
+    })
+    let baz
+    effect(() => {
+      baz = foo.foo + bar.bar
+    })
+    foo.foo = 2
+  })
+
+  it('onStop', () => {
+    const obj = reactive({
+      foo: 1,
+    })
+    const onStop = jest.fn()
+    let dummy
+    // onStop 是一个函数，也是 effect 的 option
+    const runner = effect(
+      () => {
+        dummy = obj.foo
+      },
+      {
+        onStop,
+      }
+    )
+    // 在调用 stop 的时候，onStop 也会执行
+    stop(runner)
+    expect(onStop).toBeCalledTimes(1)
   })
 })
