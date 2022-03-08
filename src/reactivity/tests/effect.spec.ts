@@ -77,20 +77,6 @@ describe('effect', () => {
     expect(dummy).toBe(3)
   })
 
-  it('stop should not clean other effect', () => {
-    const foo = reactive({
-      foo: 1,
-    })
-    const bar = reactive({
-      bar: 2,
-    })
-    let baz
-    effect(() => {
-      baz = foo.foo + bar.bar
-    })
-    foo.foo = 2
-  })
-
   it('onStop', () => {
     const obj = reactive({
       foo: 1,
