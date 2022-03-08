@@ -31,4 +31,32 @@ describe('effect', () => {
     // 获取 fn 返回的值
     expect(r).toBe('foo')
   })
+  it('scheduler', () => {
+    // 1. scheduler 作为 effect 的一个 option
+    // 2. 有了 scheduler 之后原来的 fn 参数只会执行初始化的一次
+    // 3. 如果依赖更新时不会执行 fn ，而是会去执行 scheduler
+    // 4. runner 不受影响
+    let dummy
+    let run: any
+    const scheduler = jest.fn(() => {
+      run = runner
+    })
+    const obj = reactive({ foo: 1 })
+    // 在这里将 scheduler 作为一个 option 传入 effect
+    const runner = effect(
+      () => {
+        dummy = obj.foo
+      },
+      { scheduler }
+    )
+    expect(scheduler).not.toHaveBeenCalled()
+    // 会执行一次 effect 传入的 fn
+    expect(dummy).toBe(1)
+    obj.foo++
+    // 有了 scheduler 之后，原来的 fn 就不会执行了
+    expect(scheduler).toHaveBeenCalledTimes(1)
+    expect(dummy).toBe(1)
+    run()
+    expect(dummy).toBe(2)
+  })
 })

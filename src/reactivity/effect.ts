@@ -1,6 +1,7 @@
 class ReactiveEffect {
   private _fn: any
-  constructor(fn) {
+  // [scheduler] 构造函数加入 options，这里使用 public 可以供外部使用
+  constructor(fn, public options) {
     this._fn = fn
   }
   run() {
@@ -38,15 +39,21 @@ export function trigger(target, key) {
   const depsMap = targetMap.get(target)
   const deps = depsMap.get(key)
   for (const effect of deps) {
-    effect.run()
+    // [scheduler] 这里需要判断一下 scheduler，如果存在就去运行 scheduler 而不是 fn
+    if (effect.options.scheduler) {
+      effect.options.scheduler()
+    } else {
+      effect.run()
+    }
   }
 }
 
 // 需要一个全局变量来保存当前的 effect
 let activeEffect
 
-export function effect(fn) {
-  const _effect = new ReactiveEffect(fn)
+export function effect(fn, options: any = {}) {
+  // [scheduler]在创建 ReactiveEffect 实例的时候，保存一下 options
+  const _effect = new ReactiveEffect(fn, options)
   _effect.run()
   // [runner]: 在这里将 run 方法 return 出去
   // 但是要注意 this 指向问题，所以可以 bind 后 return 出去
