@@ -33,3 +33,7 @@ export function isReadonly(raw) {
 export function shallowReadonly(raw) {
   return createActiveObject(raw, shallowReadonlyHandlers)
 }
+
+export function isProxy(wrapped) {
+  return isReactive(wrapped) || isReadonly(wrapped)
+}

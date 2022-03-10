@@ -1,4 +1,4 @@
-import { isReadonly, readonly } from '../reactive'
+import { isProxy, isReadonly, readonly } from '../reactive'
 
 describe('readonly', () => {
   it('happy path', () => {
@@ -13,6 +13,7 @@ describe('readonly', () => {
     // [isReadonly]
     expect(isReadonly(wrapped)).toBe(true)
     expect(isReadonly(original)).toBe(false)
+    expect(isProxy(wrapped)).toBe(true)
   })
   it('should warn when update readonly prop value', () => {
     // 这里使用 jest.fn
