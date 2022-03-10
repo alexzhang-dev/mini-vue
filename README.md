@@ -16,8 +16,12 @@ As you can see, I'm a frontend developer.
 
 - reactive
   - [x] [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/reactive.spec.ts#L4)
+  - [x] [isReactive](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/readonly.spec.ts#L4)
 - effect
   - [x] [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L5)
   - [x] [return runner](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L19)
   - [x] [scheduler](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L34)
   - [x] [stop & onStop](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/effect.spec.ts#L62)
+- readonly
+  - [x] [happy path](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/readonly.spec.ts#L4)
+  - [x] [isReadonly](https://github.com/zx-projects/mini-vue/blob/main/src/reactivity/tests/readonly.spec.ts#L4)
