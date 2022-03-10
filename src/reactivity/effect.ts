@@ -1,24 +1,35 @@
 import { extend } from '../shared/index'
 
+// 需要一个全局变量来保存当前的 effect
+let activeEffect, shouldTrack
 class ReactiveEffect {
   private _fn: any
   // [stop] 反向记录自己对应的 dep 那个 set
   deps = []
   active = true
+  onStop?: () => void
   // [scheduler] 构造函数加入 options，这里使用 public 可以供外部使用
   constructor(fn, public options) {
     this._fn = fn
   }
   run() {
+    if (!this.active) {
+      return this._fn()
+    }
     // 保存一下当前的 activeEffect
+    shouldTrack = true
     activeEffect = this
     const res = this._fn()
+    shouldTrack = false
     // [runner] return 运行的值
     return res
   }
   // [stop] 这个方法的作用就是去根据 this.deps 删除 this 对应的 effect
   stop() {
     cleanupEffect(this)
+    // [onStop] 如果存在 onStop，就去运行 onStop
+    if (this.onStop) this.onStop()
+    this.active = false
   }
 }
 
@@ -27,15 +38,15 @@ function cleanupEffect(effect) {
     effect.deps.forEach((dep: any) => {
       dep.delete(effect)
     })
-    // [onStop] 如果存在 onStop，就去运行 onStop
-    if (effect.onStop) effect.onStop()
-    effect.active = false
+    // 这里就没必要存了，直接清空就可以
+    effect.deps.length = 0
   }
 }
 
 // 创建全局变量 targetMap
 const targetMap = new WeakMap()
 export function track(target, key) {
+  if (!isTracking()) return
   // 我们在运行时，可能会创建多个 target，每个 target 还会可能有多个 key，每个 key 又关联着多个 effectFn
   // 而且 target -> key -> effectFn，这三者是树形的关系
   // 因此就可以创建一个 WeakMap 用于保存 target，取出来就是每个 key 对应这一个 depsMap，而每个 depsMap 又是一个 Set
@@ -54,10 +65,12 @@ export function track(target, key) {
   // [stop]：反向追踪 activeEffect 的 dep
   // 因为一个 activeEffect 可能会对应多个 dep，每个 dep 是一个 set
   // 这里我们可以使用一个数组
-  if (activeEffect && activeEffect.active) {
-    activeEffect.deps.push(dep)
-    dep.add(activeEffect)
-  }
+  activeEffect.deps.push(dep)
+  dep.add(activeEffect)
+}
+
+function isTracking() {
+  return activeEffect && shouldTrack
 }
 
 export function trigger(target, key) {
@@ -78,9 +91,6 @@ export function stop(runner) {
   // [stop] 如何获取到当前所属的 effect 实例呢？
   runner.effect.stop()
 }
-
-// 需要一个全局变量来保存当前的 effect
-let activeEffect
 
 export function effect(fn, options: any = {}) {
   // [scheduler]在创建 ReactiveEffect 实例的时候，保存一下 options
