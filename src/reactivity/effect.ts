@@ -65,6 +65,7 @@ export function track(target, key) {
   // [stop]：反向追踪 activeEffect 的 dep
   // 因为一个 activeEffect 可能会对应多个 dep，每个 dep 是一个 set
   // 这里我们可以使用一个数组
+  if (dep.has(activeEffect)) return
   activeEffect.deps.push(dep)
   dep.add(activeEffect)
 }
