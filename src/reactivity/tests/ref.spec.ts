@@ -1,6 +1,6 @@
 import { effect } from '../effect'
-import { isReactive } from '../reactive'
-import { ref } from '../ref'
+import { isReactive, reactive } from '../reactive'
+import { isRef, ref, unRef } from '../ref'
 
 describe('ref', () => {
   it('happy path', () => {
@@ -35,5 +35,14 @@ describe('ref', () => {
     a.value.foo = 2
     expect(dummy).toBe(2)
     expect(isReactive(a.value)).toBe(true)
+  })
+  it('isRef', () => {
+    expect(isRef(1)).toBe(false)
+    expect(isRef(ref(1))).toBe(true)
+    expect(isRef(reactive({ foo: 1 }))).toBe(false)
+  })
+  it('unRef', () => {
+    expect(unRef(ref(1))).toBe(1)
+    expect(unRef(1)).toBe(1)
   })
 })
