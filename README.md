@@ -42,3 +42,6 @@ As you can see, I'm a frontend developer.
   - [x] [proxyRefs](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/14.%20%E5%AE%9E%E7%8E%B0%20proxyRefs.md)
 - toRaw
   - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/12.%20%E5%AE%9E%E7%8E%B0%20toRaw.md#1-happy-path)
+- computed
+  - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/15.%20%E5%AE%9E%E7%8E%B0%20computed.md#1-happy-path)
+  - [x] [缓存机制](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/15.%20%E5%AE%9E%E7%8E%B0%20computed.md#2-%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6)
