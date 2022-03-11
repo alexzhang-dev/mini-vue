@@ -2,7 +2,7 @@ import { extend } from '../shared/index'
 
 // 需要一个全局变量来保存当前的 effect
 let activeEffect, shouldTrack
-class ReactiveEffect {
+export class ReactiveEffect {
   private _fn: any
   // [stop] 反向记录自己对应的 dep 那个 set
   deps = []
