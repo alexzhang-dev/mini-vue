@@ -65,19 +65,27 @@ export function track(target, key) {
   // [stop]：反向追踪 activeEffect 的 dep
   // 因为一个 activeEffect 可能会对应多个 dep，每个 dep 是一个 set
   // 这里我们可以使用一个数组
+  trackEffect(dep)
+}
+
+export function trackEffect(dep) {
   if (dep.has(activeEffect)) return
-  activeEffect.deps.push(dep)
+  activeEffect && activeEffect.deps.push(dep)
   dep.add(activeEffect)
 }
 
-function isTracking() {
-  return activeEffect && shouldTrack
+export function isTracking() {
+  return shouldTrack && activeEffect !== undefined
 }
 
 export function trigger(target, key) {
   // trigger 的逻辑就更加简单了，我们只需要取出对应的 deps 这个 set，再遍历执行每个 effect 就可以了
   const depsMap = targetMap.get(target)
   const deps = depsMap.get(key)
+  triggerEffect(deps)
+}
+
+export function triggerEffect(deps) {
   for (const effect of deps) {
     // [scheduler] 这里需要判断一下 scheduler，如果存在就去运行 scheduler 而不是 fn
     if (effect.options.scheduler) {
