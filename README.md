@@ -37,5 +37,7 @@ As you can see, I'm a frontend developer.
   - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/11.%20%E5%AE%9E%E7%8E%B0%20ref.md#1-happy-path)
   - [x] [ref 应该是响应式的](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/11.%20%E5%AE%9E%E7%8E%B0%20ref.md#2-ref-%E5%BA%94%E8%AF%A5%E6%98%AF%E5%93%8D%E5%BA%94%E5%BC%8F)
   - [x] [ref 的值如果是一个对象那么就是 reactive](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/11.%20%E5%AE%9E%E7%8E%B0%20ref.md#3-%E5%B5%8C%E5%A5%97-prop-%E5%BA%94%E8%AF%A5%E6%98%AF-reactive-%E7%9A%84)
+  - [x] [isRef](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/13.%20%E5%AE%9E%E7%8E%B0%20isRef%20%E5%92%8C%20unRef.md#1-isref)
+  - [x] [unRef](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/13.%20%E5%AE%9E%E7%8E%B0%20isRef%20%E5%92%8C%20unRef.md#2-unref)
 - toRaw
   - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/12.%20%E5%AE%9E%E7%8E%B0%20toRaw.md#1-happy-path)
