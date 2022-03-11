@@ -31,3 +31,5 @@ As you can see, I'm a frontend developer.
   - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/8.%20%E5%AE%9E%E7%8E%B0%20shallowReadonly.md#1-happy-path-%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B)
 - isProxy
   - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/9.%20%E5%AE%9E%E7%8E%B0%20isProxy.md#1-%E5%8D%95%E6%B5%8B)
+- shallowReactive
+  - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/10.%20%E5%AE%9E%E7%8E%B0%20shallowReactive.md#1-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
