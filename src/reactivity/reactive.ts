@@ -1,6 +1,7 @@
 import {
   mutableHandlers,
   readonlyHandlers,
+  shallowMutableHandlers,
   shallowReadonlyHandlers,
 } from './baseHandlers'
 
@@ -36,4 +37,8 @@ export function shallowReadonly(raw) {
 
 export function isProxy(wrapped) {
   return isReactive(wrapped) || isReadonly(wrapped)
+}
+
+export function shallowReactive(raw) {
+  return createActiveObject(raw, shallowMutableHandlers)
 }

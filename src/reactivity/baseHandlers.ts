@@ -6,6 +6,7 @@ const get = createGetter()
 const readonlyGet = createGetter(true)
 const set = createSetter()
 const shallowReadonlyGet = createGetter(true, true)
+const shallowMutableGet = createGetter(false, true)
 
 function createGetter(isReadonly = false, shallow = false) {
   return function get(target, key, receiver) {
@@ -60,4 +61,8 @@ export const readonlyHandlers = {
 
 export const shallowReadonlyHandlers = extend({}, readonlyHandlers, {
   get: shallowReadonlyGet,
+})
+
+export const shallowMutableHandlers = extend({}, mutableHandlers, {
+  get: shallowMutableGet,
 })
