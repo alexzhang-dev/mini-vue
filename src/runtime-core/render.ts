@@ -1,3 +1,4 @@
+import { isObject } from '../shared/index'
 import { createComponentInstance, setupComponent } from './component'
 
 export function render(vnode, container) {
@@ -7,9 +8,40 @@ export function render(vnode, container) {
 
 export function patch(vnode, container) {
   // 去处理组件，在脑图中我们可以第一步是先判断 vnode 的类型
-  // 这里先只处理 component 类型
+  // 如果是 element 就去处理 element 的逻辑
+  if (typeof vnode.type === 'string') {
+    processElement(vnode, container)
+  } else if (isObject(vnode.type)) {
+    processComponent(vnode, container)
+  }
+}
 
-  processComponent(vnode, container)
+function processElement(vnode, container) {
+  // 分为 init 和 update 两种，这里先写 init
+  mountElement(vnode, container)
+}
+
+function mountElement(vnode, container) {
+  // 此函数就是用来将 vnode -> domEl 的
+  const { type: domElType, props, children } = vnode
+  // 创建 dom
+  const domEl = document.createElement(domElType)
+  // 加入 attribute
+  for (const prop in props) {
+    domEl.setAttribute(prop, props[prop])
+  }
+  // 这里需要判断children两种情况，string or array
+  if (typeof children === 'string') {
+    domEl.textContent = children
+  } else if (Array.isArray(children)) {
+    mountChildren(vnode, container)
+  }
+}
+
+function mountChildren(vnode, container) {
+  vnode.children.forEach(vnode => {
+    patch(vnode, container)
+  })
 }
 
 export function processComponent(vnode, container) {
