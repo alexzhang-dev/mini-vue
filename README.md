@@ -52,3 +52,5 @@ As you can see, I'm a frontend developer.
 
 - 组件
   - [x] [组件的初始化流程](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/16.%20%E7%BB%84%E4%BB%B6%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B.md)
+- 打包
+  - [x] [配置 rollup](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/17.%20%E9%85%8D%E7%BD%AE%20rollup.md)
