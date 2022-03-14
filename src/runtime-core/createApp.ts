@@ -10,7 +10,7 @@ export function createApp(rootComponent) {
       // 【注意了】这个虚拟节点就是程序的入口，所有子节点递归处理
       const vnode = createVNode(rootComponent)
       // 调用 render 来渲染虚拟节点，第二个参数是容器【container】
-      render(vnode, rootContainer)
+      render(vnode, document.querySelector(rootContainer))
     },
   }
 }

@@ -21,4 +21,11 @@ function mountComponent(vnode, container) {
   const instance = createComponentInstance(vnode)
   // setup component
   setupComponent(instance)
+  // setupRenderEffect
+  setupRenderEffect(instance, container)
+}
+
+function setupRenderEffect(instance, container) {
+  const subTree = instance.render()
+  patch(subTree, container)
 }
