@@ -34,8 +34,10 @@ function mountElement(vnode, container) {
   if (typeof children === 'string') {
     domEl.textContent = children
   } else if (Array.isArray(children)) {
-    mountChildren(vnode, container)
+    mountChildren(vnode, domEl)
   }
+  // 最后将 domEl 加入 dom 树中
+  container.appendChild(domEl)
 }
 
 function mountChildren(vnode, container) {
