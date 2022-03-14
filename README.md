@@ -14,7 +14,7 @@ As you can see, I'm a frontend developer.
 
 目前已实现模块：
 
-### [reactivity]
+### reactivity
 
 - reactive
   - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/1.%E5%AE%9E%E7%8E%B0%20effect%20%26%20reactive%20%26%20%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%20%26%20%E8%A7%A6%E5%8F%91%E4%BE%9D%E8%B5%96.md#21-%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
@@ -48,7 +48,7 @@ As you can see, I'm a frontend developer.
   - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/15.%20%E5%AE%9E%E7%8E%B0%20computed.md#1-happy-path)
   - [x] [缓存机制](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/15.%20%E5%AE%9E%E7%8E%B0%20computed.md#2-%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6)
 
-### [runtime-core]
+### runtime-core
 
 - 组件
   - [x] [组件的初始化流程](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/16.%20%E7%BB%84%E4%BB%B6%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B.md)
