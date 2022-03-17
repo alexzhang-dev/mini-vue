@@ -11,9 +11,9 @@ export default {
       // string
       //'hi mini-vue',
       // array
-      // [h('p', { class: 'red' }, 'hello'), h('p', { class: 'blue' }, 'mini-vue')]
+      [h('p', { class: 'red' }, 'hello'), h('p', { class: 'blue' }, 'mini-vue')]
       // setupState
-      'hi ' + this.title
+      // 'hi ' + this.title
     )
   },
   setup() {
