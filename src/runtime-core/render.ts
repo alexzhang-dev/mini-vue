@@ -25,7 +25,7 @@ function mountElement(vnode, container) {
   // 此函数就是用来将 vnode -> domEl 的
   const { type: domElType, props, children } = vnode
   // 创建 dom
-  const domEl = document.createElement(domElType)
+  const domEl = (vnode.el = document.createElement(domElType))
   // 加入 attribute
   for (const prop in props) {
     domEl.setAttribute(prop, props[prop])
@@ -56,11 +56,11 @@ function mountComponent(vnode, container) {
   // setup component
   setupComponent(instance)
   // setupRenderEffect
-  setupRenderEffect(instance, container)
+  setupRenderEffect(instance, vnode, container)
 }
 
-function setupRenderEffect(instance, container) {
-  const { setupState } = instance
-  const subTree = instance.render.call(setupState)
+function setupRenderEffect(instance, vnode, container) {
+  const subTree = instance.render.call(instance.proxy)
   patch(subTree, container)
+  vnode.el = subTree.el
 }

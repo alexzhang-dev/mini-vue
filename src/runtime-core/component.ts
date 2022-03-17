@@ -1,3 +1,5 @@
+import { componentPublicInstanceProxyHandlers } from './componentPublicInstance'
+
 export function createComponentInstance(vnode) {
   // 这里返回一个 component 结构的数据
   const component = {
@@ -25,6 +27,12 @@ function setupStatefulComponent(instance) {
   // 而 vNode 又通过 instance 挂载到的 instance.vnode 中
   // 所以就可以通过这里传入的 instance.vnode.type 获取到用户定义的 rootComponent
   const component = instance.vnode.type
+
+  // 在这里对于 instance 的 this 进行拦截
+  instance.proxy = new Proxy(
+    { _: instance.vnode },
+    componentPublicInstanceProxyHandlers
+  )
   // 拿到 component 我们就可以拿到 setup 函数
   const { setup } = component
   // 这里需要判断一下，因为用户是不一定会写 setup 的，所以我们要给其一个默认值
@@ -41,7 +49,7 @@ function handleSetupResult(instance, setupResult) {
   // 这里先处理 Object 的情况
   if (typeof setupResult === 'object') {
     // 如果是 object ，就挂载到实例上
-    instance.setupState = setupResult
+    instance.proxy.setupState = setupResult
   }
   // 最后一步，调用初始化结束函数
   finishComponentSetup(instance)
