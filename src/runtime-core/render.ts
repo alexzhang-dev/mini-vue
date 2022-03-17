@@ -60,6 +60,7 @@ function mountComponent(vnode, container) {
 }
 
 function setupRenderEffect(instance, container) {
-  const subTree = instance.render()
+  const { setupState } = instance
+  const subTree = instance.render.call(setupState)
   patch(subTree, container)
 }
