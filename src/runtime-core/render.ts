@@ -1,4 +1,5 @@
 import { isObject } from '../shared/index'
+import { ShapeFlags } from '../shared/ShapeFlags'
 import { createComponentInstance, setupComponent } from './component'
 
 export function render(vnode, container) {
@@ -9,9 +10,10 @@ export function render(vnode, container) {
 export function patch(vnode, container) {
   // 去处理组件，在脑图中我们可以第一步是先判断 vnode 的类型
   // 如果是 element 就去处理 element 的逻辑
-  if (typeof vnode.type === 'string') {
+  const { shapeFlags } = vnode
+  if (shapeFlags & ShapeFlags.ELEMENT) {
     processElement(vnode, container)
-  } else if (isObject(vnode.type)) {
+  } else if (shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
     processComponent(vnode, container)
   }
 }
@@ -23,7 +25,7 @@ function processElement(vnode, container) {
 
 function mountElement(vnode, container) {
   // 此函数就是用来将 vnode -> domEl 的
-  const { type: domElType, props, children } = vnode
+  const { type: domElType, props, children, shapeFlags } = vnode
   // 创建 dom
   const domEl = (vnode.el = document.createElement(domElType))
   // 加入 attribute
@@ -31,9 +33,9 @@ function mountElement(vnode, container) {
     domEl.setAttribute(prop, props[prop])
   }
   // 这里需要判断children两种情况，string or array
-  if (typeof children === 'string') {
+  if (shapeFlags & ShapeFlags.TEXT_CHILDREN) {
     domEl.textContent = children
-  } else if (Array.isArray(children)) {
+  } else if (shapeFlags & ShapeFlags.ARRAY_CHILDREN) {
     mountChildren(vnode, domEl)
   }
   // 最后将 domEl 加入 dom 树中
