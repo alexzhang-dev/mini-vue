@@ -54,5 +54,6 @@ As you can see, I'm a frontend developer.
   - [x] [组件的初始化流程](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/16.%20%E7%BB%84%E4%BB%B6%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B.md)
   - [x] [组件代理对象/render 中可以访问 setup 返回/\$el](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/18.%20%E7%BB%84%E4%BB%B6%E7%9A%84%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1.md)
   - [x] [shapeFlags 对组件进行判断](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/19.%20%E5%AE%9E%E7%8E%B0%20shapeFlags.md)
+  - [x] [注册事件](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/20.%20%E5%AE%9E%E7%8E%B0%E6%B3%A8%E5%86%8C%E4%BA%8B%E4%BB%B6%E5%8A%9F%E8%83%BD.md)
 - 打包
   - [x] [配置 rollup](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/17.%20%E9%85%8D%E7%BD%AE%20rollup.md)
