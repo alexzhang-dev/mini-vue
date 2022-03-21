@@ -29,8 +29,14 @@ function mountElement(vnode, container) {
   // 创建 dom
   const domEl = (vnode.el = document.createElement(domElType))
   // 加入 attribute
+  const isOn = (key: string) => /^on[A-Z]/.test(key)
   for (const prop in props) {
-    domEl.setAttribute(prop, props[prop])
+    if (isOn(prop)) {
+      const event = prop.slice(2).toLowerCase()
+      domEl.addEventListener(event, props[prop])
+    } else {
+      domEl.setAttribute(prop, props[prop])
+    }
   }
   // 这里需要判断children两种情况，string or array
   if (shapeFlags & ShapeFlags.TEXT_CHILDREN) {

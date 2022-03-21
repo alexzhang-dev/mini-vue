@@ -7,7 +7,15 @@ export default {
     window.self = this
     return h(
       'div',
-      { class: 'red' },
+      {
+        class: 'red', // event
+        onClick() {
+          console.log('click')
+        },
+        onMousedown() {
+          console.log('mousedown')
+        },
+      },
       // string
       //'hi mini-vue',
       // array
