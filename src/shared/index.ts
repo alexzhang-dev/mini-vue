@@ -7,3 +7,7 @@ export function isObject(val) {
 export function hasChanged(val, newVal) {
   return !Object.is(val, newVal)
 }
+
+export function hasOwn(target = {}, key) {
+  return Reflect.has(target, key)
+}

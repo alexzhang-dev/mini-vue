@@ -1,3 +1,5 @@
+import { shallowReadonly } from '../reactivity/reactive'
+import { initProps } from './componentProps'
 import { componentPublicInstanceProxyHandlers } from './componentPublicInstance'
 
 export function createComponentInstance(vnode) {
@@ -6,13 +8,14 @@ export function createComponentInstance(vnode) {
     vnode,
     type: vnode.type,
     setupState: {},
+    props: {},
   }
   return component
 }
 
 export function setupComponent(instance) {
   // 初始化分为三个阶段
-  // TODO initProps()
+  initProps(instance, instance.vnode.props)
   // TODO initSlots()
   // 处理 setup 的返回值
   // 这个函数的意思是初始化一个有状态的 setup，这是因为在 vue3 中还有函数式组件
@@ -39,7 +42,7 @@ function setupStatefulComponent(instance) {
   if (setup) {
     // 获取到 setup() 的返回值，这里有两种情况，如果返回的是 function，那么这个 function 将会作为组件的 render
     // 反之就是 setupState，将其注入到上下文中
-    const setupResult = setup()
+    const setupResult = setup(shallowReadonly(instance.props))
     handleSetupResult(instance, setupResult)
   }
 }

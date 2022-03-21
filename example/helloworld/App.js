@@ -1,5 +1,5 @@
 import { h } from '../../lib/mini-vue.esm.js'
-
+import { Foo } from './Foo.js'
 window.self = null
 
 export default {
@@ -17,11 +17,13 @@ export default {
         },
       },
       // string
-      //'hi mini-vue',
+      // 'hi mini-vue'
       // array
-      [h('p', { class: 'red' }, 'hello'), h('p', { class: 'blue' }, this.title)]
+      // [h('p', { class: 'red' }, 'hello'), h('p', { class: 'blue' }, this.title)]
       // setupState
       // 'hi ' + this.title
+      // component
+      [h(Foo, { count: 1 })]
     )
   },
   setup() {

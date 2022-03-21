@@ -1,9 +1,20 @@
+import { hasOwn } from '../shared/index'
+
+const PublicProxyGetterMapping = {
+  $el: i => i.vnode.el,
+}
+
 export const componentPublicInstanceProxyHandlers = {
-  get(target, key) {
-    if (key === '$el') {
-      const { _: vnode } = target
-      return vnode.el
+  get({ _: instance }, key) {
+    const { setupState, props } = instance
+    if (hasOwn(setupState, key)) {
+      return Reflect.get(setupState, key)
+    } else if (hasOwn(props, key)) {
+      return Reflect.get(props, key)
     }
-    return target.setupState[key]
+    const publicGetter = PublicProxyGetterMapping[key]
+    if (publicGetter) {
+      return publicGetter(instance)
+    }
   },
 }
