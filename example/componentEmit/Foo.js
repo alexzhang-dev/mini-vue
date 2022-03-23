@@ -1,13 +1,12 @@
 import { h } from '../../lib/mini-vue.esm.js'
 
 export const Foo = {
-  setup(props) {
+  setup(props, { emit }) {
     const handleClick = () => {
-      console.log('aaaa')
+      emit('add')
     }
     return {
       handleClick,
-      aa: '111',
     }
   },
   render() {

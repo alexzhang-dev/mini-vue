@@ -3,7 +3,14 @@ import { Foo } from './Foo.js'
 
 export default {
   render() {
-    return h('div', {}, [h('p', {}, 'hello'), h(Foo, {}, [])])
+    return h('div', {}, [h('p', {}, 'hello'), h(Foo, { onAdd: this.onAdd })])
   },
-  setup() {},
+  setup() {
+    function onAdd() {
+      console.log('onAdd')
+    }
+    return {
+      onAdd,
+    }
+  },
 }
