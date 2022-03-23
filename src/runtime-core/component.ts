@@ -52,7 +52,7 @@ function handleSetupResult(instance, setupResult) {
   // 这里先处理 Object 的情况
   if (typeof setupResult === 'object') {
     // 如果是 object ，就挂载到实例上
-    instance.proxy.setupState = setupResult
+    instance.vnode.setupState = setupResult
   }
   // 最后一步，调用初始化结束函数
   finishComponentSetup(instance)
