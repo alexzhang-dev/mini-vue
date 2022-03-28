@@ -2,6 +2,7 @@ import { shallowReadonly } from '../reactivity/reactive'
 import { emit } from './componentEmit'
 import { initProps } from './componentProps'
 import { componentPublicInstanceProxyHandlers } from './componentPublicInstance'
+import { initSlots } from './componentSlots'
 
 export function createComponentInstance(vnode) {
   // 这里返回一个 component 结构的数据
@@ -11,6 +12,7 @@ export function createComponentInstance(vnode) {
     setupState: {},
     props: {},
     emit: () => {},
+    slots: {},
   }
   component.emit = emit.bind(null, component) as any
   return component
@@ -19,7 +21,7 @@ export function createComponentInstance(vnode) {
 export function setupComponent(instance) {
   // 初始化分为三个阶段
   initProps(instance, instance.vnode.props)
-  // TODO initSlots()
+  initSlots(instance, instance.vnode.children)
   // 处理 setup 的返回值
   // 这个函数的意思是初始化一个有状态的 setup，这是因为在 vue3 中还有函数式组件
   // 函数式组件没有状态
@@ -36,7 +38,7 @@ function setupStatefulComponent(instance) {
 
   // 在这里对于 instance 的 this 进行拦截
   instance.proxy = new Proxy(
-    { _: instance.vnode },
+    { _: instance },
     componentPublicInstanceProxyHandlers
   )
   // 拿到 component 我们就可以拿到 setup 函数
