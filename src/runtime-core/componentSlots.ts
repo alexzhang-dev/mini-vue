@@ -16,7 +16,7 @@ function initObjectSlots(instance, slots) {
   }
   // 传了一个对象
   for (const slotName of Object.keys(slots)) {
-    instance.slots[slotName] = normalizeSlots(slots[slotName])
+    instance.slots[slotName] = props => normalizeSlots(slots[slotName](props))
   }
 }
 

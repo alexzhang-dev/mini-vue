@@ -1,6 +1,9 @@
 import { h } from '../h'
 
-export function renderSlots(slots, name?: string) {
+export function renderSlots(slots, name = 'default', props) {
   // 此时 slots 就是 Object
-  return h('div', {}, name ? slots[name] : slots.default)
+  const slot = slots[name]
+  if (slot) {
+    return h('div', {}, slot(props))
+  }
 }

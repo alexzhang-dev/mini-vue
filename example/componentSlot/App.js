@@ -11,8 +11,8 @@ export default {
       Foo,
       {},
       {
-        header: h('div', {}, '123'),
-        footer: h('div', {}, '456'),
+        header: ({ count }) => h('div', {}, '123' + count),
+        footer: () => h('div', {}, '456'),
       }
     )
     return h('div', {}, [app, foo])
