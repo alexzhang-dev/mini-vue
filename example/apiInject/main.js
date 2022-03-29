@@ -2,10 +2,20 @@ import { createApp, h, provide, inject } from '../../lib/mini-vue.esm.js'
 
 const Provider = {
   render() {
-    return h('div', {}, [h('div', {}, 'Provider'), h(Consumer)])
+    return h('div', {}, [h('div', {}, 'Provider'), h(Provider2)])
   },
   setup() {
     provide('foo', 'foo')
+  },
+}
+const Provider2 = {
+  render() {
+    return h('div', {}, [h('div', {}, `Provider2: ${this.foo}`), h(Consumer)])
+  },
+  setup() {
+    provide('foo', 'foo2')
+    const foo = inject('foo')
+    return { foo }
   },
 }
 
@@ -15,7 +25,6 @@ const Consumer = {
   },
   setup() {
     return {
-      aa: '111',
       foo: inject('foo'),
     }
   },
