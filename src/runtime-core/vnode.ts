@@ -1,6 +1,7 @@
 import { ShapeFlags } from '../shared/ShapeFlags'
 
 export const Fragment = Symbol('Fragment')
+export const TextNode = Symbol('TextNode')
 
 export function createVNode(type, props?, children?) {
   // 这里先直接返回一个 VNode 结构
@@ -21,6 +22,10 @@ export function createVNode(type, props?, children?) {
     vnode.shapeFlags |= ShapeFlags.ARRAY_CHILDREN
   }
   return vnode
+}
+
+export function createTextVNode(text) {
+  return createVNode(TextNode, {}, text)
 }
 
 function getShapeFlags(type) {
