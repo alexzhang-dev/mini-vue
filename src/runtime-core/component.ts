@@ -4,7 +4,7 @@ import { initProps } from './componentProps'
 import { componentPublicInstanceProxyHandlers } from './componentPublicInstance'
 import { initSlots } from './componentSlots'
 
-export function createComponentInstance(vnode) {
+export function createComponentInstance(vnode, parent) {
   // 这里返回一个 component 结构的数据
   const component = {
     vnode,
@@ -13,6 +13,8 @@ export function createComponentInstance(vnode) {
     props: {},
     emit: () => {},
     slots: {},
+    providers: {},
+    parent,
   }
   component.emit = emit.bind(null, component) as any
   return component
@@ -61,7 +63,7 @@ function handleSetupResult(instance, setupResult) {
   // 这里先处理 Object 的情况
   if (typeof setupResult === 'object') {
     // 如果是 object ，就挂载到实例上
-    instance.vnode.setupState = setupResult
+    instance.setupState = setupResult
   }
   // 最后一步，调用初始化结束函数
   finishComponentSetup(instance)
