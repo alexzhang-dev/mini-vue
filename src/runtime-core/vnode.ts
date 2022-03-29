@@ -1,5 +1,7 @@
 import { ShapeFlags } from '../shared/ShapeFlags'
 
+export const Fragment = Symbol('Fragment')
+
 export function createVNode(type, props?, children?) {
   // 这里先直接返回一个 VNode 结构
   const vnode = {

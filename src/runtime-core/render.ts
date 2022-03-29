@@ -1,6 +1,6 @@
-import { isObject } from '../shared/index'
 import { ShapeFlags } from '../shared/ShapeFlags'
 import { createComponentInstance, setupComponent } from './component'
+import { Fragment } from './vnode'
 
 export function render(vnode, container) {
   // 这里的 render 调用 patch 方法，方便对于子节点进行递归处理
@@ -8,14 +8,24 @@ export function render(vnode, container) {
 }
 
 export function patch(vnode, container) {
-  // 去处理组件，在脑图中我们可以第一步是先判断 vnode 的类型
-  // 如果是 element 就去处理 element 的逻辑
-  const { shapeFlags } = vnode
-  if (shapeFlags & ShapeFlags.ELEMENT) {
-    processElement(vnode, container)
-  } else if (shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
-    processComponent(vnode, container)
+  const { type, shapeFlags } = vnode
+  switch (type) {
+    case Fragment:
+      processFragment(vnode, container)
+      break
+    default:
+      if (shapeFlags & ShapeFlags.ELEMENT) {
+        processElement(vnode, container)
+      } else if (shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
+        processComponent(vnode, container)
+      }
+      break
   }
+}
+
+function processFragment(vnode, container) {
+  // 因为 fragment 就是用来处理 children 的
+  mountChildren(vnode, container)
 }
 
 function processElement(vnode, container) {
