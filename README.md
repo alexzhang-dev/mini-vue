@@ -60,5 +60,6 @@ As you can see, I'm a frontend developer.
   - [x] [slots](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/23.%20%E5%AE%9E%E7%8E%B0%E7%BB%84%E4%BB%B6%E7%9A%84%20slot%20%E5%8A%9F%E8%83%BD.md)
   - [x] [Fragment 和 TextNode](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/24.%20%E5%AE%9E%E7%8E%B0%20Fragment%20%E5%92%8C%20Text%20%E8%8A%82%E7%82%B9.md)
   - [x] [getCurrentInstance](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/25.%20%E5%AE%9E%E7%8E%B0%20getCurrentInstance.md)
+  - [x] [provide/inject](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/26.%20%E5%AE%9E%E7%8E%B0%20provide%20%E5%92%8C%20inject.md)
 - 打包
   - [x] [配置 rollup](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/17.%20%E9%85%8D%E7%BD%AE%20rollup.md)
