@@ -21,11 +21,18 @@ const Provider2 = {
 
 const Consumer = {
   render() {
-    return h('div', {}, 'Consumer: ' + `inject foo: ${this.foo}`)
+    return h(
+      'div',
+      {},
+      'Consumer: ' +
+        `inject foo: ${this.foo}, baseFoo: ${this.baseFoo}, baseBar: ${this.baseBar}`
+    )
   },
   setup() {
     return {
       foo: inject('foo'),
+      baseFoo: inject('baseFoo', 'base'),
+      baseBar: inject('baseBar', () => 'baseBar'),
     }
   },
 }
