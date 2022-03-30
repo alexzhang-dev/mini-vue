@@ -58,7 +58,7 @@ export function createRenderer(options) {
     const domEl = (vnode.el = hostCreateElement(domElType))
     // 加入 attribute
     for (const prop in props) {
-      hostPatchProp(domEl, prop, props)
+      hostPatchProp(domEl, prop, props[prop])
     }
     // 这里需要判断children两种情况，string or array
     if (shapeFlags & ShapeFlags.TEXT_CHILDREN) {
