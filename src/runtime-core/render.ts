@@ -1,4 +1,5 @@
 import { effect } from '../reactivity'
+import { EMPTY_OBJ } from '../shared'
 import { ShapeFlags } from '../shared/ShapeFlags'
 import { createComponentInstance, setupComponent } from './component'
 import { createAppAPI } from './createApp'
@@ -58,8 +59,34 @@ export function createRenderer(options) {
   }
 
   function patchElement(n1, n2, container) {
-    // TODO patch props
+    const oldProps = n1.props || EMPTY_OBJ
+    const newProps = n2.props || EMPTY_OBJ
+    const el = (n2.el = n1.el)
+    patchProps(el, oldProps, newProps)
     // TODO patch children
+  }
+
+  function patchProps(el, oldProps, newProps) {
+    if (oldProps === newProps) return
+    // 情况1: old !== new 这个走更新的逻辑
+    for (const propKey of Reflect.ownKeys(newProps)) {
+      const oldProp = oldProps[propKey]
+      const newProp = newProps[propKey]
+      if (oldProp !== newProp) {
+        // 更新属性
+        hostPatchProp(el, propKey, newProp, oldProp)
+      }
+    }
+    // 情况2: old 存在，new !== undefined，这个走删除的逻辑
+    // 情况2 在 hostPatchProp 内部处理
+    // 情况3: old 存在，new 不存在，这个也走删除的逻辑
+    if (oldProps !== EMPTY_OBJ) {
+      for (const propKey of Reflect.ownKeys(oldProps)) {
+        if (!(propKey in oldProps)) {
+          hostPatchProp(el, propKey, undefined, oldProps[propKey])
+        }
+      }
+    }
   }
 
   function mountElement(n1, n2, container, parentInstance) {

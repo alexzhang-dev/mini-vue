@@ -11,3 +11,5 @@ export function hasChanged(val, newVal) {
 export function hasOwn(target = {}, key) {
   return Reflect.has(target, key)
 }
+
+export const EMPTY_OBJ = {}
