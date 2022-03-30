@@ -64,3 +64,5 @@ As you can see, I'm a frontend developer.
   - [x] [customRenderer](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/27.%20%E5%AE%9E%E7%8E%B0%20customRenderer.md)
 - 打包
   - [x] [配置 rollup](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/17.%20%E9%85%8D%E7%BD%AE%20rollup.md)
+- 更新逻辑
+  - [x] [初始化更新 element 逻辑](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/28.%20%E5%88%9D%E5%A7%8B%E5%8C%96%20element%20%E6%9B%B4%E6%96%B0%E6%B5%81%E7%A8%8B.md)
