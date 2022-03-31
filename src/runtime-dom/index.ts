@@ -26,11 +26,24 @@ function selector(container) {
   return document.querySelector(container)
 }
 
+function remove(child) {
+  const parentElement = child.parentNode
+  if (parentElement) {
+    parentElement.removeChild(child)
+  }
+}
+
+function setElementText(el, text) {
+  el.textContent = text
+}
+
 const renderer: any = createRenderer({
   createElement,
   patchProp,
   insert,
   selector,
+  remove,
+  setElementText,
 })
 
 export const createApp = (...args) => {

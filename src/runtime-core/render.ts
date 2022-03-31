@@ -11,6 +11,8 @@ export function createRenderer(options) {
     insert: hostInsert,
     patchProp: hostPatchProp,
     selector: hostSelector,
+    remove: hostRemove,
+    setElementText: hostSetElementText,
   } = options
 
   function render(vnode, container, parentInstance) {
@@ -63,7 +65,34 @@ export function createRenderer(options) {
     const newProps = n2.props || EMPTY_OBJ
     const el = (n2.el = n1.el)
     patchProps(el, oldProps, newProps)
-    // TODO patch children
+    patchChildren(n1, n2)
+  }
+
+  function patchChildren(n1, n2) {
+    const prevShapeFlag = n1.shapeFlags
+    const shapeFlag = n2.shapeFlags
+    // 情况1：array => text
+    // 对新的 shapeFlag 进行判断
+    // 如果是文本
+    if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+      if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        // 如果老的 shapeFlag 是 array_children，需要做两件事
+        // 1. 清空原有 children
+        unmountChildren(n1.children)
+        // 2. 挂载文本 children
+        hostSetElementText(n2.el, n2.children)
+      } else {
+        n2.el = n1.el
+      }
+    }
+  }
+
+  function unmountChildren(children) {
+    for (let i = 0; i < children.length; i++) {
+      // 遍历 children，同时执行 remove 逻辑
+      // 由于这里涉及到元素渲染的实际操作，所以我们要抽离出去作为一个API
+      hostRemove(children[i].el)
+    }
   }
 
   function patchProps(el, oldProps, newProps) {
