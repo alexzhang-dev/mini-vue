@@ -10,8 +10,8 @@ export default {
   render() {
     return h('div', {}, [
       h('div', {}, 'main page'),
-      h(ArrayToText),
-      // h(TextToNewText),
+      // h(ArrayToText),
+      h(TextToNewText),
       // h(TextToArray),
     ])
   },

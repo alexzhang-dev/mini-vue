@@ -71,6 +71,8 @@ export function createRenderer(options) {
   function patchChildren(n1, n2) {
     const prevShapeFlag = n1.shapeFlags
     const shapeFlag = n2.shapeFlags
+    const c1 = n1.children
+    const c2 = n2.children
     // 情况1：array => text
     // 对新的 shapeFlag 进行判断
     // 如果是文本
@@ -80,9 +82,9 @@ export function createRenderer(options) {
         // 1. 清空原有 children
         unmountChildren(n1.children)
         // 2. 挂载文本 children
-        hostSetElementText(n2.el, n2.children)
-      } else {
-        n2.el = n1.el
+      }
+      if (c1 !== c2) {
+        hostSetElementText(n2.el, c2)
       }
     }
   }
