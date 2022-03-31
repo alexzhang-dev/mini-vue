@@ -67,7 +67,7 @@ As you can see, I'm a frontend developer.
 - 更新逻辑
   - [x] [初始化更新 element 逻辑](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/28.%20%E5%88%9D%E5%A7%8B%E5%8C%96%20element%20%E6%9B%B4%E6%96%B0%E6%B5%81%E7%A8%8B.md)
   - [x] [更新 props](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/29.%20%E6%9B%B4%E6%96%B0%20props.md)
-  - 更新 children
+  - [ ] 更新 children
     - [x] [array -> text](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/30.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%B8%80%EF%BC%89.md#21-array--text)
     - [x] [text -> text](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/30.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%B8%80%EF%BC%89.md#22-text--newtext)
     - [x] [text -> array](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/30.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%B8%80%EF%BC%89.md#23-text--array)
