@@ -11,8 +11,8 @@ export default {
     return h('div', {}, [
       h('div', {}, 'main page'),
       // h(ArrayToText),
-      h(TextToNewText),
-      // h(TextToArray),
+      // h(TextToNewText),
+      h(TextToArray),
     ])
   },
 }

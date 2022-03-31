@@ -24,7 +24,7 @@ export function createRenderer(options) {
     const { type, shapeFlags } = n2
     switch (type) {
       case Fragment:
-        processFragment(n1, n2, container, parentInstance)
+        processFragment(n2, container, parentInstance)
         break
       case TextNode:
         processTextNode(n2, container)
@@ -45,30 +45,30 @@ export function createRenderer(options) {
     container.appendChild(element)
   }
 
-  function processFragment(n1, n2, container, parentInstance) {
+  function processFragment(n2, container, parentInstance) {
     // 因为 fragment 就是用来处理 children 的
-    mountChildren(n1, n2, container, parentInstance)
+    mountChildren(n2.children, container, parentInstance)
   }
 
   function processElement(n1, n2, container, parentInstance) {
     // n1 存在，update 逻辑
     if (n1) {
-      patchElement(n1, n2, container)
+      patchElement(n1, n2, container, parentInstance)
     } else {
       // 不存在 init 逻辑
       mountElement(n1, n2, container, parentInstance)
     }
   }
 
-  function patchElement(n1, n2, container) {
+  function patchElement(n1, n2, container, parentInstance) {
     const oldProps = n1.props || EMPTY_OBJ
     const newProps = n2.props || EMPTY_OBJ
     const el = (n2.el = n1.el)
     patchProps(el, oldProps, newProps)
-    patchChildren(n1, n2)
+    patchChildren(n1, n2, container, parentInstance)
   }
 
-  function patchChildren(n1, n2) {
+  function patchChildren(n1, n2, container, parentInstance) {
     const prevShapeFlag = n1.shapeFlags
     const shapeFlag = n2.shapeFlags
     const c1 = n1.children
@@ -85,6 +85,14 @@ export function createRenderer(options) {
       }
       if (c1 !== c2) {
         hostSetElementText(n2.el, c2)
+      }
+    } else {
+      if (prevShapeFlag & ShapeFlags.TEXT_CHILDREN) {
+        // 如果是 text -> array
+        // 1. 清空 text
+        hostSetElementText(n1.el, '')
+        // 2. mountChildren
+        mountChildren(c2, container, parentInstance)
       }
     }
   }
@@ -133,15 +141,15 @@ export function createRenderer(options) {
     if (shapeFlags & ShapeFlags.TEXT_CHILDREN) {
       domEl.textContent = children
     } else if (shapeFlags & ShapeFlags.ARRAY_CHILDREN) {
-      mountChildren(n1, n2, domEl, parentInstance)
+      mountChildren(n2.children, domEl, parentInstance)
     }
     // 最后将 domEl 加入 dom 树中
     hostInsert(domEl, container)
   }
 
-  function mountChildren(n1, n2, container, parentInstance) {
-    n2.children.forEach(vnode => {
-      patch(n1, vnode, container, parentInstance)
+  function mountChildren(children, container, parentInstance) {
+    children.forEach(vnode => {
+      patch(null, vnode, container, parentInstance)
     })
   }
 
