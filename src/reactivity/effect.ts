@@ -81,6 +81,9 @@ export function isTracking() {
 export function trigger(target, key) {
   // trigger 的逻辑就更加简单了，我们只需要取出对应的 deps 这个 set，再遍历执行每个 effect 就可以了
   const depsMap = targetMap.get(target)
+  if (!depsMap) {
+    return
+  }
   const deps = depsMap.get(key)
   triggerEffect(deps)
 }
