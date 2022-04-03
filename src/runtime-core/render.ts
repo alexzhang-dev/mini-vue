@@ -17,23 +17,23 @@ export function createRenderer(options) {
 
   function render(vnode, container, parentInstance) {
     // 这里的 render 调用 patch 方法，方便对于子节点进行递归处理
-    patch(null, vnode, container, parentInstance)
+    patch(null, vnode, container, parentInstance, null)
   }
 
-  function patch(n1, n2, container, parentInstance) {
+  function patch(n1, n2, container, parentInstance, anchor) {
     const { type, shapeFlags } = n2
     switch (type) {
       case Fragment:
-        processFragment(n2, container, parentInstance)
+        processFragment(n2, container, parentInstance, anchor)
         break
       case TextNode:
         processTextNode(n2, container)
         break
       default:
         if (shapeFlags & ShapeFlags.ELEMENT) {
-          processElement(n1, n2, container, parentInstance)
+          processElement(n1, n2, container, parentInstance, anchor)
         } else if (shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
-          processComponent(n2, container, parentInstance)
+          processComponent(n2, container, parentInstance, anchor)
         }
         break
     }
@@ -45,30 +45,30 @@ export function createRenderer(options) {
     container.appendChild(element)
   }
 
-  function processFragment(n2, container, parentInstance) {
+  function processFragment(n2, container, parentInstance, anchor) {
     // 因为 fragment 就是用来处理 children 的
-    mountChildren(n2.children, container, parentInstance)
+    mountChildren(n2.children, container, parentInstance, anchor)
   }
 
-  function processElement(n1, n2, container, parentInstance) {
+  function processElement(n1, n2, container, parentInstance, anchor) {
     // n1 存在，update 逻辑
     if (n1) {
-      patchElement(n1, n2, container, parentInstance)
+      patchElement(n1, n2, parentInstance, anchor)
     } else {
       // 不存在 init 逻辑
-      mountElement(n1, n2, container, parentInstance)
+      mountElement(n2, container, parentInstance, anchor)
     }
   }
 
-  function patchElement(n1, n2, container, parentInstance) {
+  function patchElement(n1, n2, parentInstance, anchor) {
     const oldProps = n1.props || EMPTY_OBJ
     const newProps = n2.props || EMPTY_OBJ
     const el = (n2.el = n1.el)
     patchProps(el, oldProps, newProps)
-    patchChildren(n1, n2, container, parentInstance)
+    patchChildren(n1, n2, el, parentInstance, anchor)
   }
 
-  function patchChildren(n1, n2, container, parentInstance) {
+  function patchChildren(n1, n2, container, parentInstance, anchor) {
     const prevShapeFlag = n1.shapeFlags
     const shapeFlag = n2.shapeFlags
     const c1 = n1.children
@@ -92,7 +92,61 @@ export function createRenderer(options) {
         // 1. 清空 text
         hostSetElementText(n1.el, '')
         // 2. mountChildren
-        mountChildren(c2, container, parentInstance)
+        mountChildren(c2, container, parentInstance, anchor)
+      } else {
+        // array -> array
+        patchKeyedChildren(c1, c2, container, parentInstance, anchor)
+      }
+    }
+  }
+
+  function patchKeyedChildren(c1, c2, container, parentInstance, anchor) {
+    let l2 = c2.length
+    // 声明三个指针，e1 是老节点最后一个元素，e2 是新节点最后一个元素，i 是当前对比的元素
+    let e1 = c1.length - 1
+    let e2 = l2 - 1
+    let i = 0
+    // 目前我们用来两个节点是否一样暂时只用 type 和 key
+    function isSameVNode(n1, n2) {
+      return n1.type === n2.type && n1.key === n2.key
+    }
+    // 首先我们要从新旧节点头部开始对比
+    while (i <= e1 && i <= e2) {
+      if (isSameVNode(c1[i], c2[i])) {
+        patch(c1[i], c2[i], container, parentInstance, anchor)
+      } else {
+        break
+      }
+      i += 1
+    }
+    // 对比完了头部，我们还要对比尾部
+    while (i <= e1 && i <= e2) {
+      // 尾部这里就是对比尾部的了
+      if (isSameVNode(c1[e1], c2[e2])) {
+        patch(c1[e1], c2[e2], container, parentInstance, anchor)
+      } else {
+        break
+      }
+      e1 -= 1
+      e2 -= 1
+    }
+    if (i > e1) {
+      if (i <= e2) {
+        // nextPos 就是需要追加元素的索引
+        // 如果这个新元素的索引已经超过了新节点的长度，那么说明是追加到尾部
+        // anchor = null，如果没有超过新节点的长度，那么就是插入到某个位置
+        // 此时 anchor = c2[nextPos].el，也就是这个新加元素的下一个元素
+        const nextPos = e2 + 1
+        const anchor = nextPos < l2 ? c2[nextPos].el : null
+        while (i <= e2) {
+          patch(null, c2[i], container, parentInstance, anchor)
+          i += 1
+        }
+      }
+    } else if (i > e2) {
+      while (i <= e1) {
+        hostRemove(c1[i].el)
+        i += 1
       }
     }
   }
@@ -128,7 +182,7 @@ export function createRenderer(options) {
     }
   }
 
-  function mountElement(n1, n2, container, parentInstance) {
+  function mountElement(n2, container, parentInstance, anchor) {
     // 此函数就是用来将 vnode -> domEl 的
     const { type: domElType, props, children, shapeFlags } = n2
     // 创建 dom
@@ -141,32 +195,32 @@ export function createRenderer(options) {
     if (shapeFlags & ShapeFlags.TEXT_CHILDREN) {
       domEl.textContent = children
     } else if (shapeFlags & ShapeFlags.ARRAY_CHILDREN) {
-      mountChildren(n2.children, domEl, parentInstance)
+      mountChildren(n2.children, domEl, parentInstance, anchor)
     }
     // 最后将 domEl 加入 dom 树中
-    hostInsert(domEl, container)
+    hostInsert(domEl, container, anchor)
   }
 
-  function mountChildren(children, container, parentInstance) {
+  function mountChildren(children, container, parentInstance, anchor) {
     children.forEach(vnode => {
-      patch(null, vnode, container, parentInstance)
+      patch(null, vnode, container, parentInstance, anchor)
     })
   }
 
-  function processComponent(vnode, container, parentInstance) {
-    mountComponent(vnode, container, parentInstance)
+  function processComponent(vnode, container, parentInstance, anchor) {
+    mountComponent(vnode, container, parentInstance, anchor)
   }
 
-  function mountComponent(vnode, container, parentInstance) {
+  function mountComponent(vnode, container, parentInstance, anchor) {
     // 通过 vnode 获取组件实例
     const instance = createComponentInstance(vnode, parentInstance)
     // setup component
     setupComponent(instance)
     // setupRenderEffect
-    setupRenderEffect(instance, vnode, container)
+    setupRenderEffect(instance, vnode, container, anchor)
   }
 
-  function setupRenderEffect(instance, vnode, container) {
+  function setupRenderEffect(instance, vnode, container, anchor) {
     effect(() => {
       if (instance.isMounted) {
         // update 逻辑
@@ -174,13 +228,13 @@ export function createRenderer(options) {
         vnode.el = subTree.el
         const preSubTree = instance.subTree
         instance.subTree = subTree
-        patch(preSubTree, subTree, container, instance)
+        patch(preSubTree, subTree, container, instance, anchor)
       } else {
         // init 逻辑
         const subTree = (instance.subTree = instance.render.call(
           instance.proxy
         ))
-        patch(null, subTree, container, instance)
+        patch(null, subTree, container, instance, anchor)
         vnode.el = subTree.el
         instance.isMounted = true
       }

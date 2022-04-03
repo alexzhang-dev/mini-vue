@@ -6,20 +6,18 @@ function createElement(type) {
 
 const isOn = (key: string) => /^on[A-Z]/.test(key)
 
-function patchProp(el, prop, val, oldVal) {
+function patchProp(el, prop, val) {
   if (isOn(prop)) {
     const event = prop.slice(2).toLowerCase()
     el.addEventListener(event, val)
   } else {
-    console.log({ prop, val, oldVal })
-
     if (val === undefined || null) el.removeAttribute(prop)
     else el.setAttribute(prop, val)
   }
 }
 
-function insert(el, parent) {
-  parent.appendChild(el)
+function insert(el, parent, anchor) {
+  parent.insertBefore(el, anchor || null)
 }
 
 function selector(container) {
