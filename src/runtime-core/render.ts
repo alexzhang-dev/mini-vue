@@ -121,7 +121,7 @@ export function createRenderer(options) {
     // 情况3: old 存在，new 不存在，这个也走删除的逻辑
     if (oldProps !== EMPTY_OBJ) {
       for (const propKey of Reflect.ownKeys(oldProps)) {
-        if (!(propKey in oldProps)) {
+        if (!(propKey in newProps)) {
           hostPatchProp(el, propKey, undefined, oldProps[propKey])
         }
       }
