@@ -67,10 +67,11 @@ As you can see, I'm a frontend developer.
 - 更新逻辑
   - [x] [初始化更新 element 逻辑](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/28.%20%E5%88%9D%E5%A7%8B%E5%8C%96%20element%20%E6%9B%B4%E6%96%B0%E6%B5%81%E7%A8%8B.md)
   - [x] [更新 props](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/29.%20%E6%9B%B4%E6%96%B0%20props.md)
-  - [ ] 更新 children
+  - [x] 更新 children
     - [x] [array -> text](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/30.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%B8%80%EF%BC%89.md#21-array--text)
     - [x] [text -> text](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/30.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%B8%80%EF%BC%89.md#22-text--newtext)
     - [x] [text -> array](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/30.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%B8%80%EF%BC%89.md#23-text--array)
-    - [ ] array -> array
+    - [x] array -> array
       - [x] [首尾对比](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/31.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%BA%8C%EF%BC%89.md)
       - [x] [中间对比（一）删除多的旧节点](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/32.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%B8%89%EF%BC%89.md)
+      - [x] [中间对比（二）移动和创建少的节点](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/33.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E5%9B%9B%EF%BC%89.md)
