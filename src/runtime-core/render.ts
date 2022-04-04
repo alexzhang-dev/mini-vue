@@ -158,6 +158,14 @@ export function createRenderer(options) {
       let patched = 0
       // c2 混乱部分映射
       const keyToNewIndexMap = new Map()
+      // 储存旧节点混乱元素的索引，创建定长数组，性能更好
+      const newIndexToOldIndexMap = new Array(toBePatched)
+      // 应该移动
+      let shouldMove = false
+      // 目前最大的索引
+      let maxNewIndexSoFar = 0
+      // 循环初始化每一项索引，0 表示未建立映射关系
+      for (let i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0
       // 添加映射
       for (let i = s2; i <= e2; i++) {
         const nextChild = c2[i]
@@ -189,8 +197,40 @@ export function createRenderer(options) {
         if (newIndex === undefined) {
           hostRemove(prevChild.el)
         } else {
+          // 判断是否需要移动
+          if (newIndex >= maxNewIndexSoFar) {
+            maxNewIndexSoFar = newIndex
+          } else {
+            shouldMove = true
+          }
+          // 确定新节点存在，储存索引映射关系
+          // newIndex 获取到当前老节点在新节点中的元素，减去 s2 是要将整个混乱的部分拆开，索引归于 0
+          // 为什么是 i + 1 是因为需要考虑 i 是 0 的情况，因为我们的索引映射表中 0 表示的是初始化状态
+          // 所以不能是 0，因此需要用到 i + 1
+          newIndexToOldIndexMap[newIndex - s2] = i + 1
           patch(prevChild, c2[newIndex], container, parentInstance, null)
           patched += 1
+        }
+      }
+      const increasingNewIndexSequence = shouldMove
+        ? getSequence(newIndexToOldIndexMap)
+        : []
+      // 需要两个指针 i,j
+      // j 指向获取出来的最长递增子序列的索引
+      // i 指向我们新节点
+      let j = increasingNewIndexSequence.length - 1
+      for (let i = toBePatched - 1; i >= 0; i--) {
+        // 获取元素的索引
+        const nextIndex = i + s2
+        const nextChild = c2[nextIndex]
+        const anchor = nextIndex + 1 < l2 ? c2[nextIndex + 1].el : null
+        if (shouldMove) {
+          if (j < 0 || i !== increasingNewIndexSequence[j]) {
+            // 移动
+            hostInsert(nextChild.el, container, anchor)
+          } else {
+            j -= 1
+          }
         }
       }
     }
@@ -289,4 +329,71 @@ export function createRenderer(options) {
   return {
     createApp: createAppAPI(render, hostSelector),
   }
+}
+
+/**
+ * 求最长递增子序列在原数组的下标数组
+ * @param arr {number[]}
+ * @return {number[]}
+ */
+function getSequence(arr: number[]): number[] {
+  // 浅拷贝 arr
+  const _arr = arr.slice()
+  const len = _arr.length
+  // 存储最长递增子序列对应 arr 中下标
+  const result = [0]
+
+  for (let i = 0; i < len; i++) {
+    const val = _arr[i]
+
+    // 排除等于 0 的情况
+    if (val !== 0) {
+      /* 1. 贪心算法 */
+
+      // 获取 result 当前最大值的下标
+      const j = result[result.length - 1]
+      // 如果当前 val 大于当前递增子序列的最大值的时候，直接添加
+      if (arr[j] < val) {
+        _arr[i] = j // 保存上一次递增子序列最后一个值的索引
+        result.push(i)
+        continue
+      }
+
+      /* 2. 二分法 */
+
+      // 定义二分法查找区间 [left, right]
+      let left = 0
+      let right = result.length - 1
+      while (left < right) {
+        // 求中间值（向下取整）
+        const mid = (left + right) >> 1
+        if (arr[result[mid]] < val) left = mid + 1
+        else right = mid
+      }
+
+      // 当前递增子序列按顺序找到第一个大于 val 的值，将其替换
+      if (val < arr[result[left]]) {
+        if (left > 0) {
+          // 保存上一次递增子序列最后一个值的索引
+          _arr[i] = result[left - 1]
+        }
+
+        // 此时有可能导致结果不正确，即 result [left + 1] < result [left]
+        // 所以我们需要通过 _arr 来记录正常的结果
+        result[left] = i
+      }
+    }
+  }
+
+  // 修正贪心算法可能造成最长递增子序列在原数组里不是正确的顺序
+  let len2 = result.length
+  let idx = result[len2 - 1]
+  // 倒序回溯，通过之前 _arr 记录的上一次递增子序列最后一个值的索引
+  // 进而找到最终正确的索引
+  while (len2-- > 0) {
+    result[len2] = idx
+    idx = _arr[idx]
+  }
+
+  return result
 }
