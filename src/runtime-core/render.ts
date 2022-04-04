@@ -148,6 +148,51 @@ export function createRenderer(options) {
         hostRemove(c1[i].el)
         i += 1
       }
+    } else {
+      // 对比中间部分
+      let s1 = i
+      let s2 = i
+      // 添加变量 toBePatched，用于记录所有需要 patch 的节点，也就是目前新节点的混乱部分的个数
+      const toBePatched = e2 - s2 + 1
+      // patched 是当前的 patch 过的个数
+      let patched = 0
+      // c2 混乱部分映射
+      const keyToNewIndexMap = new Map()
+      // 添加映射
+      for (let i = s2; i <= e2; i++) {
+        const nextChild = c2[i]
+        keyToNewIndexMap.set(nextChild.key, i)
+      }
+      // 循环老的，根据映射找
+      for (let i = s1; i <= e1; i++) {
+        const prevChild = c1[i]
+        if (patched >= toBePatched) {
+          // 如果当前 patched 的个数已经超过了应该 patched 的个数
+          // 那么直接删除
+          hostRemove(prevChild.el)
+          continue
+        }
+        let newIndex
+        // 如果当前老的子节点的 key 不是空的
+        if (prevChild.key !== null) {
+          // 就去映射表中找到新的对应的 newIndex
+          newIndex = keyToNewIndexMap.get(prevChild.key)
+        } else {
+          // 如果老的子节点的 key 是空的，还需要再次遍历新节点，找到与当前老节点相同的 VNode，并将其索引赋给 j
+          for (let j = s2; j <= e2; j++) {
+            if (isSameVNode(prevChild, c2[j])) {
+              newIndex = j
+              break
+            }
+          }
+        }
+        if (newIndex === undefined) {
+          hostRemove(prevChild.el)
+        } else {
+          patch(prevChild, c2[newIndex], container, parentInstance, null)
+          patched += 1
+        }
+      }
     }
   }
 
