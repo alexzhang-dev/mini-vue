@@ -73,3 +73,4 @@ As you can see, I'm a frontend developer.
     - [x] [text -> array](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/30.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%B8%80%EF%BC%89.md#23-text--array)
     - [ ] array -> array
       - [x] [首尾对比](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/31.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%BA%8C%EF%BC%89.md)
+      - [x] [中间对比（一）删除多的旧节点](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/32.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E4%B8%89%EF%BC%89.md)
