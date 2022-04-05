@@ -4,6 +4,7 @@ import { ShapeFlags } from '../shared/ShapeFlags'
 import { createComponentInstance, setupComponent } from './component'
 import { shouldUpdateComponent } from './componentUpdateUtils'
 import { createAppAPI } from './createApp'
+import { queueJobs } from './scheduler'
 import { Fragment, TextNode } from './vnode'
 
 export function createRenderer(options) {
@@ -70,6 +71,8 @@ export function createRenderer(options) {
   }
 
   function patchChildren(n1, n2, container, parentInstance, anchor) {
+    console.log('patchChildren')
+
     const prevShapeFlag = n1.shapeFlags
     const shapeFlag = n2.shapeFlags
     const c1 = n1.children
@@ -331,32 +334,40 @@ export function createRenderer(options) {
   }
 
   function setupRenderEffect(instance, vnode, container, anchor) {
-    instance.update = effect(() => {
-      if (instance.isMounted) {
-        // update 逻辑
-        // 如果 instance.next 存在，那么就是 component 的更新部分
-        const { next, vnode } = instance
-        if (next) {
-          // 更新组件 el、props
-          next.el = vnode.el
-          updateComponentPreRender(instance, next)
-        }
+    instance.update = effect(
+      () => {
+        if (instance.isMounted) {
+          // update 逻辑
+          // 如果 instance.next 存在，那么就是 component 的更新部分
+          const { next, vnode } = instance
+          if (next) {
+            // 更新组件 el、props
+            next.el = vnode.el
+            updateComponentPreRender(instance, next)
+          }
 
-        const subTree = instance.render.call(instance.proxy)
-        vnode.el = subTree.el
-        const preSubTree = instance.subTree
-        instance.subTree = subTree
-        patch(preSubTree, subTree, container, instance, anchor)
-      } else {
-        // init 逻辑
-        const subTree = (instance.subTree = instance.render.call(
-          instance.proxy
-        ))
-        patch(null, subTree, container, instance, anchor)
-        vnode.el = subTree.el
-        instance.isMounted = true
+          const subTree = instance.render.call(instance.proxy)
+          vnode.el = subTree.el
+          const preSubTree = instance.subTree
+          instance.subTree = subTree
+          patch(preSubTree, subTree, container, instance, anchor)
+        } else {
+          // init 逻辑
+          const subTree = (instance.subTree = instance.render.call(
+            instance.proxy
+          ))
+          patch(null, subTree, container, instance, anchor)
+          vnode.el = subTree.el
+          instance.isMounted = true
+        }
+      },
+      {
+        scheduler() {
+          // 将本次 update 加入到任务队列中
+          queueJobs(instance.update)
+        },
       }
-    })
+    )
   }
 
   return {
