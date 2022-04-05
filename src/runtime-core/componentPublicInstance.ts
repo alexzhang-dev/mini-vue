@@ -3,6 +3,7 @@ import { hasOwn } from '../shared/index'
 const PublicProxyGetterMapping = {
   $el: i => i.vnode.el,
   $slots: i => i.slots,
+  $props: i => i.props,
 }
 
 export const componentPublicInstanceProxyHandlers = {
