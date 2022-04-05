@@ -2,6 +2,7 @@ import { effect } from '../reactivity'
 import { EMPTY_OBJ } from '../shared'
 import { ShapeFlags } from '../shared/ShapeFlags'
 import { createComponentInstance, setupComponent } from './component'
+import { shouldUpdateComponent } from './componentUpdateUtils'
 import { createAppAPI } from './createApp'
 import { Fragment, TextNode } from './vnode'
 
@@ -33,7 +34,7 @@ export function createRenderer(options) {
         if (shapeFlags & ShapeFlags.ELEMENT) {
           processElement(n1, n2, container, parentInstance, anchor)
         } else if (shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
-          processComponent(n2, container, parentInstance, anchor)
+          processComponent(n1, n2, container, parentInstance, anchor)
         }
         break
     }
@@ -295,13 +296,34 @@ export function createRenderer(options) {
     })
   }
 
-  function processComponent(vnode, container, parentInstance, anchor) {
-    mountComponent(vnode, container, parentInstance, anchor)
+  function processComponent(n1, n2, container, parentInstance, anchor) {
+    if (n1) {
+      // update component
+      updateComponent(n1, n2)
+    } else {
+      // init component
+      mountComponent(n2, container, parentInstance, anchor)
+    }
+  }
+
+  function updateComponent(n1, n2) {
+    const instance = (n2.component = n1.component)
+    // instance 挂载最新的虚拟节点
+    if (shouldUpdateComponent(n1, n2)) {
+      instance.next = n2
+      instance.update()
+    } else {
+      n2.el = n1.el
+      instance.vnode = n2
+    }
   }
 
   function mountComponent(vnode, container, parentInstance, anchor) {
     // 通过 vnode 获取组件实例
-    const instance = createComponentInstance(vnode, parentInstance)
+    const instance = (vnode.component = createComponentInstance(
+      vnode,
+      parentInstance
+    ))
     // setup component
     setupComponent(instance)
     // setupRenderEffect
@@ -309,9 +331,17 @@ export function createRenderer(options) {
   }
 
   function setupRenderEffect(instance, vnode, container, anchor) {
-    effect(() => {
+    instance.update = effect(() => {
       if (instance.isMounted) {
         // update 逻辑
+        // 如果 instance.next 存在，那么就是 component 的更新部分
+        const { next, vnode } = instance
+        if (next) {
+          // 更新组件 el、props
+          next.el = vnode.el
+          updateComponentPreRender(instance, next)
+        }
+
         const subTree = instance.render.call(instance.proxy)
         vnode.el = subTree.el
         const preSubTree = instance.subTree
@@ -332,6 +362,12 @@ export function createRenderer(options) {
   return {
     createApp: createAppAPI(render, hostSelector),
   }
+}
+
+function updateComponentPreRender(instance, nextVNode) {
+  instance.vnode = nextVNode
+  instance.props = nextVNode.props
+  nextVNode = null
 }
 
 /**
