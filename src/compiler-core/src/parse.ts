@@ -19,7 +19,10 @@ function createRoot(children) {
 
 function parseChildren(context: { source: string }): any {
   const nodes: any = []
-  const node = parseInterpolation(context)
+  let node
+  if (context.source.startsWith('{{')) {
+    node = parseInterpolation(context)
+  }
   nodes.push(node)
   return [node]
 }
