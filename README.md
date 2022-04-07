@@ -77,3 +77,8 @@ As you can see, I'm a frontend developer.
       - [x] [中间对比（二）移动和创建少的节点](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/33.%20%E6%9B%B4%E6%96%B0%20children%EF%BC%88%E5%9B%9B%EF%BC%89.md)
   - [x] [更新 component](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/34.%20%E6%9B%B4%E6%96%B0%20component.md)
   - [x] [异步更新视图和 `nextTick` API](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/35.%20%E8%A7%86%E5%9B%BE%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0%20%26%26%20nextTick%20API.md)
+
+### compiler-core
+
+- [x] [compiler 模块概述](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/36.%20%E7%BC%96%E8%AF%91%E6%A8%A1%E5%9D%97%E6%A6%82%E8%BF%B0.md)
+- [x] [解析插值表达式](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/37.%20%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90%E6%8F%92%E5%80%BC%E8%A1%A8%E8%BE%BE%E5%BC%8F.md)
