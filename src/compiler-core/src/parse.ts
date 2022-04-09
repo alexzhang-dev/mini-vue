@@ -101,11 +101,13 @@ function parseTag(context: { source: string }, type: TagType) {
 
 function parseText(context: { source: string }): any {
   const s = context.source
-  const endToken = '{{'
+  const endTokens = ['</', '{{']
   let endIndex = s.length
-  const index = s.indexOf(endToken)
-  if (index !== -1) {
-    endIndex = index
+  for (let i = 0; i < endTokens.length; i++) {
+    const index = s.indexOf(endTokens[i])
+    if (index !== -1 && endIndex > index) {
+      endIndex = index
+    }
   }
   const content = parseTextData(context, endIndex)
   advanceBy(context, content.length)
