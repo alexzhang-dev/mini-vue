@@ -17,8 +17,8 @@ describe('Parse', () => {
   })
   describe('element', () => {
     test('simple element', () => {
-      const interpolationStr = '<div></div>'
-      const ast = baseParse(interpolationStr)
+      const elementStr = '<div></div>'
+      const ast = baseParse(elementStr)
       expect(ast.children[0]).toStrictEqual({
         type: NodeType.ELEMENT,
         tag: 'div',
@@ -27,8 +27,8 @@ describe('Parse', () => {
   })
   describe('text', () => {
     test('simple text', () => {
-      const interpolationStr = 'simple text'
-      const ast = baseParse(interpolationStr)
+      const textStr = 'simple text'
+      const ast = baseParse(textStr)
       expect(ast.children[0]).toStrictEqual({
         type: NodeType.TEXT,
         content: 'simple text',
