@@ -29,12 +29,10 @@ As you can see, I'm a frontend developer.
   - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/5.%20%E5%AE%9E%E7%8E%B0%20readonly%20%E5%8A%9F%E8%83%BD.md#1-happy-path-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
   - [x] [isReadonly](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/6.%20%E5%AE%9E%E7%8E%B0%20isReactive%20%E5%92%8C%20isReadonly.md#3-isreadonly-%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B)
   - [x] [readonly 嵌套转换](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/7.%20%E5%AE%9E%E7%8E%B0%20reactive%20%E5%92%8C%20readonly%20%E7%9A%84%E5%B5%8C%E5%A5%97%E8%BD%AC%E6%8D%A2.md#3-readonly-%E5%B5%8C%E5%A5%97%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B)
-- shallowReadonly
+- [x] [shallowReadonly](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/8.%20%E5%AE%9E%E7%8E%B0%20shallowReadonly.md)
   - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/8.%20%E5%AE%9E%E7%8E%B0%20shallowReadonly.md#1-happy-path-%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B)
-- isProxy
-  - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/9.%20%E5%AE%9E%E7%8E%B0%20isProxy.md#1-%E5%8D%95%E6%B5%8B)
-- shallowReactive
-  - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/10.%20%E5%AE%9E%E7%8E%B0%20shallowReactive.md#1-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
+- [x] [isProxy](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/9.%20%E5%AE%9E%E7%8E%B0%20isProxy.md)
+- [x] [shallowReactive](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/10.%20%E5%AE%9E%E7%8E%B0%20shallowReactive.md)
 - ref
   - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/11.%20%E5%AE%9E%E7%8E%B0%20ref.md#1-happy-path)
   - [x] [ref 应该是响应式的](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/11.%20%E5%AE%9E%E7%8E%B0%20ref.md#2-ref-%E5%BA%94%E8%AF%A5%E6%98%AF%E5%93%8D%E5%BA%94%E5%BC%8F)
@@ -42,11 +40,8 @@ As you can see, I'm a frontend developer.
   - [x] [isRef](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/13.%20%E5%AE%9E%E7%8E%B0%20isRef%20%E5%92%8C%20unRef.md#1-isref)
   - [x] [unRef](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/13.%20%E5%AE%9E%E7%8E%B0%20isRef%20%E5%92%8C%20unRef.md#2-unref)
   - [x] [proxyRefs](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/14.%20%E5%AE%9E%E7%8E%B0%20proxyRefs.md)
-- toRaw
-  - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/12.%20%E5%AE%9E%E7%8E%B0%20toRaw.md#1-happy-path)
-- computed
-  - [x] [happy path](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/15.%20%E5%AE%9E%E7%8E%B0%20computed.md#1-happy-path)
-  - [x] [缓存机制](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/15.%20%E5%AE%9E%E7%8E%B0%20computed.md#2-%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6)
+- [x] [toRaw](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/12.%20%E5%AE%9E%E7%8E%B0%20toRaw.md)
+- [x] [computed](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/15.%20%E5%AE%9E%E7%8E%B0%20computed.md)
 
 ### runtime-core
 
