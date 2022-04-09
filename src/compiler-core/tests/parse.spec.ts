@@ -22,6 +22,7 @@ describe('Parse', () => {
       expect(ast.children[0]).toStrictEqual({
         type: NodeType.ELEMENT,
         tag: 'div',
+        children: [],
       })
     })
   })
@@ -35,7 +36,7 @@ describe('Parse', () => {
       })
     })
   })
-  test.only('happy path', () => {
+  test('happy path', () => {
     const ast = baseParse('<div>hi,{{message}}</div>')
     expect(ast.children[0]).toStrictEqual({
       type: NodeType.ELEMENT,
