@@ -84,3 +84,4 @@ As you can see, I'm a frontend developer.
 - [x] [解析插值表达式](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/37.%20%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90%E6%8F%92%E5%80%BC%E8%A1%A8%E8%BE%BE%E5%BC%8F.md)
 - [x] [解析 element 标签](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/38.%20%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90%20element%20%E6%A0%87%E7%AD%BE.md)
 - [x] [解析 text](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/39.%20%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90%20text.md)
+- [x] [三种类型联合解析](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/40.%20%E4%B8%89%E7%A7%8D%E7%B1%BB%E5%9E%8B%E8%81%94%E5%90%88%E8%A7%A3%E6%9E%90.md)
