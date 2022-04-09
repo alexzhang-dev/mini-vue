@@ -31,6 +31,9 @@ function parseChildren(context: { source: string }): any {
   } else if (s.startsWith('<') && /[a-z]/i.test(s[1])) {
     node = parseElement(context)
   }
+  if (!node) {
+    node = parseText(context)
+  }
   nodes.push(node)
   return [node]
 }
@@ -48,7 +51,7 @@ function parseInterpolation(context: { source: string }) {
   // 获取到 {{}} 中间值的长度
   const rawContentLength = closeIndex - openDelimiter.length
   // 并将中间这个值获取出来
-  const rawContent = context.source.slice(0, rawContentLength)
+  const rawContent = parseTextData(context, rawContentLength)
   const content = rawContent.trim()
   // 继续【推进】
   advanceBy(context, rawContentLength + closeDelimiter.length)
@@ -81,4 +84,17 @@ function parseTag(context: { source: string }, type: TagType) {
     type: NodeType.ELEMENT,
     tag,
   }
+}
+
+function parseText(context: { source: string }): any {
+  const content = parseTextData(context, context.source.length)
+  advanceBy(context, content.length)
+  return {
+    type: NodeType.TEXT,
+    content,
+  }
+}
+
+function parseTextData(context: { source: string }, length) {
+  return context.source.slice(0, length)
 }

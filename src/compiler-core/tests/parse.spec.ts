@@ -25,4 +25,14 @@ describe('Parse', () => {
       })
     })
   })
+  describe('text', () => {
+    test('simple text', () => {
+      const interpolationStr = 'simple text'
+      const ast = baseParse(interpolationStr)
+      expect(ast.children[0]).toStrictEqual({
+        type: NodeType.TEXT,
+        content: 'simple text',
+      })
+    })
+  })
 })
