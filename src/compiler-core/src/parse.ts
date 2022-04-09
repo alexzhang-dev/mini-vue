@@ -7,7 +7,7 @@ const enum TagType {
 
 export function baseParse(content: string) {
   const context = createContext(content)
-  return createRoot(parseChildren(context, ''))
+  return createRoot(parseChildren(context, []))
 }
 
 function createContext(content: string) {
@@ -22,15 +22,15 @@ function createRoot(children) {
   }
 }
 
-function parseChildren(context: { source: string }, parentTag: string): any {
+function parseChildren(context: { source: string }, ancestors): any {
   const nodes: any = []
-  while (!isEnd(context, parentTag)) {
+  while (!isEnd(context, ancestors)) {
     let node
     const s = context.source
     if (s.startsWith('{{')) {
       node = parseInterpolation(context)
     } else if (s.startsWith('<') && /[a-z]/i.test(s[1])) {
-      node = parseElement(context)
+      node = parseElement(context, ancestors)
     }
     if (!node) {
       node = parseText(context)
@@ -40,11 +40,16 @@ function parseChildren(context: { source: string }, parentTag: string): any {
   return nodes
 }
 
-function isEnd(context: { source: string }, parentTag: string) {
+function isEnd(context: { source: string }, ancestors) {
   const s = context.source
   // 2. 遇到结束标签
-  if (parentTag && s.startsWith(`</${parentTag}>`)) {
-    return true
+  if (s.startsWith('</')) {
+    for (let i = ancestors.length - 1; i >= 0; i--) {
+      const tag = ancestors[i].tag
+      if (startsWithEndTagOpen(s, tag)) {
+        return true
+      }
+    }
   }
   // 1. source 有值
   return !s
@@ -80,10 +85,16 @@ function advanceBy(context, length: number) {
   context.source = context.source.slice(length)
 }
 
-function parseElement(context: { source: string }): any {
+function parseElement(context: { source: string }, ancestors): any {
   const element: any = parseTag(context, TagType.START)
-  element.children = parseChildren(context, element.tag)
-  parseTag(context, TagType.END)
+  ancestors.push(element)
+  element.children = parseChildren(context, ancestors)
+  ancestors.pop()
+  if (startsWithEndTagOpen(context.source, element.tag)) {
+    parseTag(context, TagType.END)
+  } else {
+    throw new Error(`不存在结束标签：${element.tag}`)
+  }
   return element
 }
 
@@ -119,4 +130,9 @@ function parseText(context: { source: string }): any {
 
 function parseTextData(context: { source: string }, length) {
   return context.source.slice(0, length)
+}
+
+function startsWithEndTagOpen(source, tag) {
+  const endTokenLength = '</'.length
+  return source.slice(endTokenLength, tag.length + endTokenLength) === tag
 }
