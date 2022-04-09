@@ -85,3 +85,4 @@ As you can see, I'm a frontend developer.
 - [x] [解析 element 标签](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/38.%20%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90%20element%20%E6%A0%87%E7%AD%BE.md)
 - [x] [解析 text](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/39.%20%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90%20text.md)
 - [x] [三种类型联合解析](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/40.%20%E4%B8%89%E7%A7%8D%E7%B1%BB%E5%9E%8B%E8%81%94%E5%90%88%E8%A7%A3%E6%9E%90.md)
+- [x] [从有限状态机的角度看 parse 模块原理](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/41.%20%E4%BB%8E%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA%E7%9A%84%E8%A7%92%E5%BA%A6%E7%9C%8B%20parse%20%E5%8E%9F%E7%90%86.md)
