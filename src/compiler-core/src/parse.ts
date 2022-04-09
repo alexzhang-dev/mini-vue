@@ -43,7 +43,7 @@ function parseChildren(context: { source: string }, ancestors): any {
 function isEnd(context: { source: string }, ancestors) {
   const s = context.source
   // 2. 遇到结束标签
-  if (s.startsWith('</')) {
+  if (s.startsWith('<')) {
     for (let i = ancestors.length - 1; i >= 0; i--) {
       const tag = ancestors[i].tag
       if (startsWithEndTagOpen(s, tag)) {
@@ -112,7 +112,7 @@ function parseTag(context: { source: string }, type: TagType) {
 
 function parseText(context: { source: string }): any {
   const s = context.source
-  const endTokens = ['</', '{{']
+  const endTokens = ['<', '{{']
   let endIndex = s.length
   for (let i = 0; i < endTokens.length; i++) {
     const index = s.indexOf(endTokens[i])
