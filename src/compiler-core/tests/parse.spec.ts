@@ -35,4 +35,24 @@ describe('Parse', () => {
       })
     })
   })
+  test.only('happy path', () => {
+    const ast = baseParse('<div>hi,{{message}}</div>')
+    expect(ast.children[0]).toStrictEqual({
+      type: NodeType.ELEMENT,
+      tag: 'div',
+      children: [
+        {
+          type: NodeType.TEXT,
+          content: 'hi,',
+        },
+        {
+          type: NodeType.INTERPOLATION,
+          content: {
+            type: NodeType.SIMPLE_EXPRESSION,
+            content: 'message',
+          },
+        },
+      ],
+    })
+  })
 })

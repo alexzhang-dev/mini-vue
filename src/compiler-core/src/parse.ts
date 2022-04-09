@@ -7,7 +7,7 @@ const enum TagType {
 
 export function baseParse(content: string) {
   const context = createContext(content)
-  return createRoot(parseChildren(context))
+  return createRoot(parseChildren(context, ''))
 }
 
 function createContext(content: string) {
@@ -22,20 +22,32 @@ function createRoot(children) {
   }
 }
 
-function parseChildren(context: { source: string }): any {
+function parseChildren(context: { source: string }, parentTag: string): any {
   const nodes: any = []
-  let node
+  while (!isEnd(context, parentTag)) {
+    let node
+    const s = context.source
+    if (s.startsWith('{{')) {
+      node = parseInterpolation(context)
+    } else if (s.startsWith('<') && /[a-z]/i.test(s[1])) {
+      node = parseElement(context)
+    }
+    if (!node) {
+      node = parseText(context)
+    }
+    nodes.push(node)
+  }
+  return nodes
+}
+
+function isEnd(context: { source: string }, parentTag: string) {
   const s = context.source
-  if (s.startsWith('{{')) {
-    node = parseInterpolation(context)
-  } else if (s.startsWith('<') && /[a-z]/i.test(s[1])) {
-    node = parseElement(context)
+  // 2. 遇到结束标签
+  if (parentTag && s.startsWith(`</${parentTag}>`)) {
+    return true
   }
-  if (!node) {
-    node = parseText(context)
-  }
-  nodes.push(node)
-  return [node]
+  // 1. source 有值
+  return !s
 }
 
 function parseInterpolation(context: { source: string }) {
@@ -69,7 +81,8 @@ function advanceBy(context, length: number) {
 }
 
 function parseElement(context: { source: string }): any {
-  const element = parseTag(context, TagType.START)
+  const element: any = parseTag(context, TagType.START)
+  element.children = parseChildren(context, element.tag)
   parseTag(context, TagType.END)
   return element
 }
@@ -87,7 +100,14 @@ function parseTag(context: { source: string }, type: TagType) {
 }
 
 function parseText(context: { source: string }): any {
-  const content = parseTextData(context, context.source.length)
+  const s = context.source
+  const endToken = '{{'
+  let endIndex = s.length
+  const index = s.indexOf(endToken)
+  if (index !== -1) {
+    endIndex = index
+  }
+  const content = parseTextData(context, endIndex)
   advanceBy(context, content.length)
   return {
     type: NodeType.TEXT,
