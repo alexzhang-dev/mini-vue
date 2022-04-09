@@ -43,7 +43,7 @@ function parseChildren(context: { source: string }, ancestors): any {
 function isEnd(context: { source: string }, ancestors) {
   const s = context.source
   // 2. 遇到结束标签
-  if (s.startsWith('<')) {
+  if (s.startsWith('</')) {
     for (let i = ancestors.length - 1; i >= 0; i--) {
       const tag = ancestors[i].tag
       if (startsWithEndTagOpen(s, tag)) {
