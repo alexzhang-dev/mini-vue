@@ -19,6 +19,7 @@ function createContext(content: string) {
 function createRoot(children) {
   return {
     children,
+    type: NodeType.ROOT,
   }
 }
 
