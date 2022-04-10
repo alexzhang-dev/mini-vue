@@ -6,12 +6,12 @@ export function codegen(ast) {
   const args = ['_ctx', '_cache']
   const signature = args.join(', ')
   push(`function ${funcName}(${signature}) { `)
-  push(`return '${genNode(ast, push)}'`)
+  push(`return '${genNode(ast)}'`)
   push(` }`)
   return context.code
 }
 
-function genNode(ast, push) {
+function genNode(ast) {
   const { codegenNode } = ast
   return `${codegenNode.content}`
 }
