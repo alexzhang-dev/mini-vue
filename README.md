@@ -81,3 +81,4 @@ As you can see, I'm a frontend developer.
 - [x] [三种类型联合解析](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/40.%20%E4%B8%89%E7%A7%8D%E7%B1%BB%E5%9E%8B%E8%81%94%E5%90%88%E8%A7%A3%E6%9E%90.md)
 - [x] [从有限状态机的角度看 parse 模块原理](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/41.%20%E4%BB%8E%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA%E7%9A%84%E8%A7%92%E5%BA%A6%E7%9C%8B%20parse%20%E5%8E%9F%E7%90%86.md)
 - [x] [transform 模块](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/42.%20transform%20%E6%A8%A1%E5%9D%97.md)
+- [x] [codegen 生成 text](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/43.%20codegen%20%E7%94%9F%E6%88%90%20text.md)
