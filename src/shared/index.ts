@@ -21,3 +21,5 @@ export function hasOwn(target = {}, key) {
 }
 
 export const EMPTY_OBJ = {}
+
+export { toDisplayString } from './toDisplayString'

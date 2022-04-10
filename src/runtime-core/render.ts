@@ -2,6 +2,7 @@ import { effect } from '../reactivity'
 import { EMPTY_OBJ } from '../shared'
 import { ShapeFlags } from '../shared/ShapeFlags'
 import { createComponentInstance, setupComponent } from './component'
+import { renderComponentRoot } from './componentRenderUtils'
 import { shouldUpdateComponent } from './componentUpdateUtils'
 import { createAppAPI } from './createApp'
 import { queueJobs } from './scheduler'
@@ -346,16 +347,14 @@ export function createRenderer(options) {
             updateComponentPreRender(instance, next)
           }
 
-          const subTree = instance.render.call(instance.proxy)
+          const subTree = renderComponentRoot(instance)
           vnode.el = subTree.el
           const preSubTree = instance.subTree
           instance.subTree = subTree
           patch(preSubTree, subTree, container, instance, anchor)
         } else {
           // init 逻辑
-          const subTree = (instance.subTree = instance.render.call(
-            instance.proxy
-          ))
+          const subTree = (instance.subTree = renderComponentRoot(instance))
           patch(null, subTree, container, instance, anchor)
           vnode.el = subTree.el
           instance.isMounted = true

@@ -15,7 +15,7 @@ export function codegen(ast) {
   }
 
   const funcName = 'render'
-  push(`export `)
+  push(`return `)
   const args = ['_ctx', '_cache']
   const signature = args.join(', ')
   push(`function ${funcName}(${signature}) { `)

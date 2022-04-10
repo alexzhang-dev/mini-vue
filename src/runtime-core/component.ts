@@ -79,9 +79,11 @@ function finishComponentSetup(instance) {
   // 这里为了获取 component 方便，我们可以在 instance 上加一个 type 属性
   // 指向 vnode.type
   const component = instance.type
-  // 如果 instance.render 没有的话，我们就让 component.render 赋给 instance.render
-  // 而没有 component.render 咋办捏，其实可以通过编译器来自动生成一个 render 函数
-  // 这里先不写
+  if (!component.render && compiler) {
+    if (component.template) {
+      component.render = compiler(component.template)
+    }
+  }
   if (!instance.render) {
     instance.render = component.render
   }
@@ -95,4 +97,10 @@ export function getCurrentInstance() {
 
 export function setCurrentInstance(instance) {
   currentInstance = instance
+}
+
+let compiler
+
+export function registerCompiler(_compiler) {
+  compiler = _compiler
 }

@@ -1,2 +1,14 @@
 export * from './runtime-dom'
-export * from './reactivity/index'
+import { baseCompile } from './compiler-core/src'
+import * as runtimeDom from './runtime-dom'
+import { registerCompiler } from './runtime-dom'
+
+function compileToFunction(template: string) {
+  const { code } = baseCompile(template)
+  console.log({ code })
+
+  const render = new Function('Vue', code)(runtimeDom)
+  return render
+}
+
+registerCompiler(compileToFunction)
