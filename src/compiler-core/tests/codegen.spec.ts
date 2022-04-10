@@ -1,7 +1,8 @@
 import { codegen } from '../src/codegen'
 import { baseParse } from '../src/parse'
 import { transform } from '../src/transform'
-import { transformExpression } from '../src/transfroms/transformExpression'
+import { transformElement } from '../src/transforms/transformElement'
+import { transformExpression } from '../src/transforms/transformExpression'
 
 describe('codegen', () => {
   test('text', () => {
@@ -16,6 +17,15 @@ describe('codegen', () => {
     const ast = baseParse(template)
     transform(ast, {
       nodeTransforms: [transformExpression],
+    })
+    const code = codegen(ast)
+    expect(code).toMatchSnapshot()
+  })
+  test('simple element', () => {
+    const template = '<div></div>'
+    const ast = baseParse(template)
+    transform(ast, {
+      nodeTransforms: [transformElement],
     })
     const code = codegen(ast)
     expect(code).toMatchSnapshot()

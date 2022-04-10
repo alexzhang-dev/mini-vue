@@ -28,11 +28,11 @@ function traverseNode(node, context) {
   const { nodeTransforms } = context
   for (let i = 0; i < nodeTransforms.length; i++) {
     const transform = nodeTransforms[i]
-    transform(node)
+    transform(node, context)
   }
   switch (node.type) {
     case NodeType.INTERPOLATION:
-      context.helper(HelperNameMapping[TO_DISPLAY_STRING])
+      context.helper(TO_DISPLAY_STRING)
       break
     case NodeType.ROOT:
     case NodeType.ELEMENT:

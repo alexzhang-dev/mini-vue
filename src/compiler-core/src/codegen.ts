@@ -1,5 +1,9 @@
 import { NodeType } from './ast'
-import { HelperNameMapping, TO_DISPLAY_STRING } from './runtimeHelpers'
+import {
+  CREATE_ELEMENT_VNODE,
+  HelperNameMapping,
+  TO_DISPLAY_STRING,
+} from './runtimeHelpers'
 
 export function codegen(ast) {
   const context = createCodegenContext()
@@ -23,7 +27,7 @@ export function codegen(ast) {
 function genFunctionPreamble(ast, context) {
   const VueBinding = 'Vue'
   const { push, newLine } = context
-  const aliasHelper = s => `${s}: _${s}`
+  const aliasHelper = s => `${HelperNameMapping[s]}: _${HelperNameMapping[s]}`
   push(`const { ${ast.helpers.map(aliasHelper).join(', ')} } = ${VueBinding}`)
   newLine()
 }
@@ -39,7 +43,16 @@ function genNode(node, context) {
     case NodeType.SIMPLE_EXPRESSION:
       genExpression(node, context)
       break
+    case NodeType.ELEMENT:
+      genElement(node, context)
+      break
   }
+}
+
+function genElement(node, context) {
+  const { push, helper } = context
+  const { tag } = node
+  push(`${helper(CREATE_ELEMENT_VNODE)}('${tag}')`)
 }
 
 function genExpression(node, context) {

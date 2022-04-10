@@ -5,4 +5,9 @@ exports[`codegen interpolation 1`] = `
 export function render(_ctx, _cache) { return _toDisplayString(_ctx.message) }"
 `;
 
+exports[`codegen simple element 1`] = `
+"const { createElementVNode: _createElementVNode } = Vue
+export function render(_ctx, _cache) { return  }"
+`;
+
 exports[`codegen text 1`] = `"export function render(_ctx, _cache) { return 'hi' }"`;
