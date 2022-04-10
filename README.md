@@ -84,3 +84,4 @@ As you can see, I'm a frontend developer.
 - [x] [codegen 生成 text](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/43.%20codegen%20%E7%94%9F%E6%88%90%20text.md)
 - [x] [codegen 生成插值](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/44.%20codegen%20%E7%94%9F%E6%88%90%E6%8F%92%E5%80%BC%E7%B1%BB%E5%9E%8B.md)
 - [x] [codegen 生成 element](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/45.%20codegen%20%E7%94%9F%E6%88%90%20element.md)
+- [x] [template 编译为 render](https://github.com/zx-projects/mini-vue-docs/blob/main/docs/47.%20%E5%AE%9E%E7%8E%B0%20template%20%E7%BC%96%E8%AF%91%E4%B8%BA%20render.md)
