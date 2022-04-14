@@ -24,6 +24,8 @@ export type Component = {
   next: VNode | null
   subTree: VNode | {}
   update?: any
+  proxy?: null | ProxyConstructor
+  render?: (args: unknown[]) => VNode
 }
 
 export function createComponentInstance(vnode: VNode, parent: Component) {
@@ -47,7 +49,7 @@ export function createComponentInstance(vnode: VNode, parent: Component) {
   return component
 }
 
-export function setupComponent(instance) {
+export function setupComponent(instance: Component) {
   // 初始化分为三个阶段
   initProps(instance, instance.vnode.props)
   initSlots(instance, instance.vnode.children)
@@ -57,15 +59,16 @@ export function setupComponent(instance) {
   setupStatefulComponent(instance)
 }
 
-function setupStatefulComponent(instance) {
+function setupStatefulComponent(instance: Component) {
   // 这个函数的处理流程其实非常简单，只需要调用 setup() 获取到返回值就可以了
   // 那么第一步我们就是要获取用户自定义的 setup
   // 通过对初始化的逻辑进行梳理后我们发现，在 createVNode() 函数中将 rootComponent 挂载到了 vNode.type
   // 而 vNode 又通过 instance 挂载到的 instance.vnode 中
   // 所以就可以通过这里传入的 instance.vnode.type 获取到用户定义的 rootComponent
-  const component = instance.vnode.type
+  const component = instance.vnode.type as VNode
 
   // 在这里对于 instance 的 this 进行拦截
+  // TODO proxyConstructor
   instance.proxy = new Proxy(
     { _: instance },
     componentPublicInstanceProxyHandlers
@@ -87,8 +90,7 @@ function setupStatefulComponent(instance) {
   }
 }
 
-function handleSetupResult(instance, setupResult) {
-  // TODO function
+function handleSetupResult(instance: Component, setupResult: Record<string, unknown>) {
   // 这里先处理 Object 的情况
   if (typeof setupResult === 'object') {
     // 如果是 object ，就挂载到实例上
@@ -98,10 +100,10 @@ function handleSetupResult(instance, setupResult) {
   finishComponentSetup(instance)
 }
 
-function finishComponentSetup(instance) {
+function finishComponentSetup(instance: Component) {
   // 这里为了获取 component 方便，我们可以在 instance 上加一个 type 属性
   // 指向 vnode.type
-  const component = instance.type
+  const component = instance.type as VNode
   if (!component.render && compiler) {
     if (component.template) {
       component.render = compiler(component.template)
@@ -112,16 +114,17 @@ function finishComponentSetup(instance) {
   }
 }
 
-let currentInstance
+let currentInstance: Component | null = null
 
 export function getCurrentInstance() {
   return currentInstance
 }
 
-export function setCurrentInstance(instance) {
+export function setCurrentInstance(instance: Component | null) {
   currentInstance = instance
 }
 
+// TODO compiler type
 let compiler
 
 export function registerCompiler(_compiler) {
