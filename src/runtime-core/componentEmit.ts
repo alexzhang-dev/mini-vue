@@ -1,6 +1,8 @@
 import { VNode } from "./vnode"
 
-export function emit(this: null, instance: VNode, event: string, ...params: unknown[]) {
+export type EmitFn = (event: string, ...args: any[]) => void
+
+export function emit(instance: VNode, event: string, ...params: unknown[]) {
   const { props } = instance
   const camelize = (str: string) => {
     return str.replace(/-(\w)/, (_, str: string) => {

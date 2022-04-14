@@ -1,6 +1,6 @@
 import { shallowReadonly } from '../reactivity/reactive'
 import { proxyRefs } from '../reactivity/ref'
-import { emit } from './componentEmit'
+import { emit, EmitFn } from './componentEmit'
 import { initProps } from './componentProps'
 import { componentPublicInstanceProxyHandlers } from './componentPublicInstance'
 import { initSlots } from './componentSlots'
@@ -12,7 +12,7 @@ export type Component = {
   type: VNode["type"]
   setupState: Record<string, unknown>
   props: VNode["props"]
-  emit: (this: null, instance: VNode, event: string, ...params: unknown[]) => void
+  emit: EmitFn
   slots: InternalSlots
   provides: Record<string, unknown>
   parent: Component
