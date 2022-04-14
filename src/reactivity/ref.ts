@@ -41,6 +41,7 @@ export function unRef(ref) {
 }
 
 export function proxyRefs(objectWithRefs) {
+  if(!isObject(objectWithRefs)) return
   return new Proxy(objectWithRefs, {
     get(target, key, receiver) {
       // 自动 unRef
