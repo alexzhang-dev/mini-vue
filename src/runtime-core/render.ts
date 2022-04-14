@@ -16,6 +16,7 @@ export type ContainerType = VNode["el"]
 export type OldVNodeType = VNode | string
 export type OldVNodeTypeWithNone = OldVNodeType | null | string
 export type NewVNodeType = VNode
+export type RendererType = (vnode: VNode, container: ContainerType) => void
 
 export function createRenderer(options: RendererOptions<NormalNode>) {
   const {
@@ -27,9 +28,9 @@ export function createRenderer(options: RendererOptions<NormalNode>) {
     setElementText: hostSetElementText,
   } = options
 
-  function render(vnode: VNode, container: ContainerType, parentInstance: Component) {
+  function render(vnode: VNode, container: ContainerType, parentInstance?: Component | null) {
     // 这里的 render 调用 patch 方法，方便对于子节点进行递归处理
-    patch(null, vnode, container, parentInstance, null)
+    patch(null, vnode, container, parentInstance as Component, null)
   }
 
   function patch(n1: OldVNodeTypeWithNone, n2: NewVNodeType, container: ContainerType, parentInstance: Component, anchor: AnchorType) {
