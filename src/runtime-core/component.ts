@@ -1,6 +1,6 @@
 import { shallowReadonly } from '../reactivity/reactive'
 import { proxyRefs } from '../reactivity/ref'
-import { emit, EmitFn } from './componentEmit'
+import { emit, EmitFn, EmitFn1, EmitFn2 } from './componentEmit'
 import { initProps } from './componentProps'
 import { componentPublicInstanceProxyHandlers } from './componentPublicInstance'
 import { initSlots } from './componentSlots'
@@ -41,7 +41,7 @@ export function createComponentInstance(vnode: VNode, parent: Component) {
     next: null,
     subTree: {},
   }
-  component.emit = emit.bind(null, component)
+  component.emit = (emit as EmitFn1).bind(null, component) as EmitFn2
   return component
 }
 
