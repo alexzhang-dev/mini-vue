@@ -1,4 +1,7 @@
-export function shouldUpdateComponent(prevVNode, nextVNode) {
+
+import { VNode } from "./vnode"
+
+export function shouldUpdateComponent(prevVNode: VNode, nextVNode: VNode) {
   const { props: prevProps } = prevVNode
   const { props: nextProps } = nextVNode
   for (const key in nextProps) {
