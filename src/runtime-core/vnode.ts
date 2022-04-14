@@ -3,15 +3,32 @@ import { ShapeFlags } from '../shared/ShapeFlags'
 export const Fragment = Symbol('Fragment')
 export const TextNode = Symbol('TextNode')
 
-export function createVNode(type, props?, children?) {
+type VNodeType = string | typeof Fragment | typeof TextNode
+
+type Props = {
+  key?: number | string | null
+  [key: string]: string | number | boolean | symbol | null | undefined
+}
+
+type VNode = {
+  readonly type: VNodeType
+  props: Props
+  children: VNode[] | string | undefined
+  el: null | HTMLElement
+  component: unknown
+  key: Props["key"]
+  shapeFlags: ShapeFlags
+}
+
+export function createVNode<T extends Props = {}>(type: VNodeType, props: T, children?: VNode[] | string | undefined) {
   // 这里先直接返回一个 VNode 结构
-  const vnode = {
+  const vnode: VNode = {
     type,
     props,
     children,
     el: null,
     component: null,
-    key: props ? props.key : null,
+    key: props ? props.key! : null,
     shapeFlags: getShapeFlags(type),
   }
   // 还要对于 children 进行处理
@@ -26,7 +43,7 @@ export function createVNode(type, props?, children?) {
   return vnode
 }
 
-export function createTextVNode(text) {
+export function createTextVNode(text: string) {
   return createVNode(TextNode, {}, text)
 }
 
