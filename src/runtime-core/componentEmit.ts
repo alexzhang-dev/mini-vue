@@ -1,6 +1,9 @@
+import { Component } from "./component"
 import { VNode } from "./vnode"
 
-export type EmitFn = (event: string, ...args: any[]) => void
+export type EmitFn1 = (preInject) => void
+export type EmitFn2 = (event: string, ...args: any[]) => void
+export type EmitFn = EmitFn1 | EmitFn2
 
 export function emit(instance: VNode, event: string, ...params: unknown[]) {
   const { props } = instance
