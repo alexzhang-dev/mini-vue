@@ -1,6 +1,6 @@
 import { getCurrentInstance } from './component'
 
-export function provide(key, value) {
+export function provide(key: string, value: string | number | boolean) {
   const currentInstance = getCurrentInstance()
   if (currentInstance) {
     let provides = currentInstance.provides
@@ -13,7 +13,7 @@ export function provide(key, value) {
     provides[key] = value
   }
 }
-export function inject(key, defaultValue) {
+export function inject(key: string, defaultValue?: unknown) {
   const currentInstance = getCurrentInstance()
   if (currentInstance) {
     const { parent } = currentInstance
