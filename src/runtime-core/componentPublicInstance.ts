@@ -1,13 +1,14 @@
 import { hasOwn } from '../shared/index'
+import { Component } from './component'
 
-const PublicProxyGetterMapping = {
+const PublicProxyGetterMapping: Record<string, (i: Component) => unknown> = {
   $el: i => i.vnode.el,
   $slots: i => i.slots,
   $props: i => i.props,
 }
 
 export const componentPublicInstanceProxyHandlers = {
-  get({ _: instance }, key) {
+  get({ _: instance }: { _: Component }, key: string) {
     const { setupState, props } = instance
     if (hasOwn(setupState, key)) {
       return Reflect.get(setupState, key)

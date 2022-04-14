@@ -8,7 +8,7 @@ export type VNodeType = string | typeof Fragment | typeof TextNode | VNode
 
 export type VNodeProps = {
   key?: number | string | null
-  [key: string]: string | number | boolean | symbol | null | undefined
+  [key: string]: string | number | boolean | symbol | null | undefined | ((...args: unknown[]) => void)
 }
 
 export type VNode = {
