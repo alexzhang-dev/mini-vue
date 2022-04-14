@@ -5,8 +5,6 @@ import { registerCompiler } from './runtime-dom'
 
 function compileToFunction(template: string) {
   const { code } = baseCompile(template)
-  console.log({ code })
-
   const render = new Function('Vue', code)(runtimeDom)
   return render
 }

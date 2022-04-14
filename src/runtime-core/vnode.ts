@@ -1,5 +1,7 @@
+import { isObject } from '../shared'
 import { ShapeFlags } from '../shared/ShapeFlags'
 import { Component } from './component'
+import { RawSlotsType } from './types/slots'
 
 export const Fragment = Symbol('Fragment')
 export const TextNode = Symbol('TextNode')
@@ -14,7 +16,7 @@ export type VNodeProps = {
 export type VNode = {
   readonly type: VNodeType
   props: VNodeProps
-  children: VNode[] | string
+  children: VNode[] | string | RawSlotsType
   el: null | HTMLElement | Text
   component: Component | null
   key: VNodeProps["key"]
@@ -43,6 +45,11 @@ export function createVNode<T extends VNodeProps>(type: VNodeType, props?: T, ch
   } else if (Array.isArray(children)) {
     // 这里也是同理
     vnode.shapeFlags |= ShapeFlags.ARRAY_CHILDREN
+  }
+  if (vnode.shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
+    if (isObject(vnode.children)) {
+      vnode.shapeFlags |= ShapeFlags.SLOT_CHILDREN
+    }
   }
   return vnode
 }

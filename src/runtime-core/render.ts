@@ -82,7 +82,6 @@ export function createRenderer(options: RendererOptions<NormalNode>) {
   }
 
   function patchChildren(on1: OldVNodeType, n2: NewVNodeType, container: ContainerType, parentInstance: Component, anchor: AnchorType) {
-    console.log('patchChildren')
     const n1 = on1 as VNode
     const prevShapeFlag = n1.shapeFlags
     const shapeFlag = n2.shapeFlags

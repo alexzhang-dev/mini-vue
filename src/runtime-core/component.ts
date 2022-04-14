@@ -4,28 +4,26 @@ import { emit } from './componentEmit'
 import { initProps } from './componentProps'
 import { componentPublicInstanceProxyHandlers } from './componentPublicInstance'
 import { initSlots } from './componentSlots'
+import { InternalSlots } from './types/slots'
 import type { VNode } from './vnode'
-
-type SlotsType = {
-  default: (...args: unknown[]) => void
-  [key: string]: (...args: unknown[]) => void
-}
 
 export type Component = {
   vnode: VNode
   type: VNode["type"]
   setupState: Record<string, unknown>
   props: VNode["props"]
-  emit: (...args: unknown[]) => void
-  slots: SlotsType
+  emit: (this: null, instance: VNode, event: string, ...params: unknown[]) => void
+  slots: InternalSlots
   provides: Record<string, unknown>
   parent: Component
   isMounted: boolean
   next: VNode | null
   subTree: VNode | {}
   update?: any
-  proxy?: null | ProxyConstructor
-  render?: (args: unknown[]) => VNode
+  proxy?: null | { _: Component }
+  render?: (this: { _: Component } | null | undefined, setupResult: {
+    _: Component;
+  } | null | undefined) => VNode
 }
 
 export function createComponentInstance(vnode: VNode, parent: Component) {
@@ -36,9 +34,7 @@ export function createComponentInstance(vnode: VNode, parent: Component) {
     setupState: {},
     props: {},
     emit: () => { },
-    slots: {
-      default: () => { }
-    },
+    slots: {},
     provides: parent ? parent.provides : {},
     parent,
     isMounted: false,
@@ -68,7 +64,6 @@ function setupStatefulComponent(instance: Component) {
   const component = instance.vnode.type as VNode
 
   // 在这里对于 instance 的 this 进行拦截
-  // TODO proxyConstructor
   instance.proxy = new Proxy(
     { _: instance },
     componentPublicInstanceProxyHandlers
