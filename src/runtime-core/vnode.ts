@@ -1,31 +1,32 @@
 import { ShapeFlags } from '../shared/ShapeFlags'
+import { Component } from './component'
 
 export const Fragment = Symbol('Fragment')
 export const TextNode = Symbol('TextNode')
 
-export type VNodeType = string | typeof Fragment | typeof TextNode
+export type VNodeType = string | typeof Fragment | typeof TextNode | VNode
 
-export type Props = {
+export type VNodeProps = {
   key?: number | string | null
   [key: string]: string | number | boolean | symbol | null | undefined
 }
 
 export type VNode = {
   readonly type: VNodeType
-  props: Props
-  children: VNode[] | string | undefined
-  el: null | HTMLElement
-  component: unknown
-  key: Props["key"]
+  props: VNodeProps
+  children: VNode[] | string
+  el: null | HTMLElement | Text
+  component: Component | null
+  key: VNodeProps["key"]
   shapeFlags: ShapeFlags
 }
 
-export function createVNode<T extends Props = {}>(type: VNodeType, props: T, children?: VNode[] | string | undefined) {
+export function createVNode<T extends VNodeProps>(type: VNodeType, props?: T, children?: VNode[] | string | undefined) {
   // 这里先直接返回一个 VNode 结构
   const vnode: VNode = {
     type,
-    props,
-    children,
+    props: props || {},
+    children: children || "",
     el: null,
     component: null,
     key: props ? props.key! : null,

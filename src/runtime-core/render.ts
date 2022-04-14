@@ -1,14 +1,23 @@
 import { effect } from '../reactivity'
+import { NormalNode, RendererOptions } from '../runtime-dom/types'
 import { EMPTY_OBJ } from '../shared'
 import { ShapeFlags } from '../shared/ShapeFlags'
-import { createComponentInstance, setupComponent } from './component'
+import { Component, createComponentInstance, setupComponent } from './component'
 import { renderComponentRoot } from './componentRenderUtils'
 import { shouldUpdateComponent } from './componentUpdateUtils'
 import { createAppAPI } from './createApp'
 import { queueJobs } from './scheduler'
-import { Fragment, TextNode } from './vnode'
+import { Fragment, TextNode, } from './vnode'
+import type { VNode } from './vnode'
+import { Props } from './types/element'
 
-export function createRenderer(options) {
+export type AnchorType = HTMLElement | null | Text
+export type ContainerType = VNode["el"]
+export type OldVNodeType = VNode | string
+export type OldVNodeTypeWithNone = OldVNodeType | null | string
+export type NewVNodeType = VNode
+
+export function createRenderer(options: RendererOptions<NormalNode>) {
   const {
     createElement: hostCreateElement,
     insert: hostInsert,
@@ -18,12 +27,12 @@ export function createRenderer(options) {
     setElementText: hostSetElementText,
   } = options
 
-  function render(vnode, container, parentInstance) {
+  function render(vnode: VNode, container: ContainerType, parentInstance: Component) {
     // 这里的 render 调用 patch 方法，方便对于子节点进行递归处理
     patch(null, vnode, container, parentInstance, null)
   }
 
-  function patch(n1, n2, container, parentInstance, anchor) {
+  function patch(n1: OldVNodeTypeWithNone, n2: NewVNodeType, container: ContainerType, parentInstance: Component, anchor: AnchorType) {
     const { type, shapeFlags } = n2
     switch (type) {
       case Fragment:
@@ -42,18 +51,18 @@ export function createRenderer(options) {
     }
   }
 
-  function processTextNode(vnode, container) {
+  function processTextNode(vnode: NewVNodeType, container: ContainerType) {
     // TextNode 本身就是纯 text
-    const element = (vnode.el = document.createTextNode(vnode.children))
-    container.appendChild(element)
+    const element = (vnode.el = document.createTextNode(vnode.children as string))
+    container!.appendChild(element)
   }
 
-  function processFragment(n2, container, parentInstance, anchor) {
+  function processFragment(n2: NewVNodeType, container: ContainerType, parentInstance: Component, anchor: AnchorType) {
     // 因为 fragment 就是用来处理 children 的
     mountChildren(n2.children, container, parentInstance, anchor)
   }
 
-  function processElement(n1, n2, container, parentInstance, anchor) {
+  function processElement(n1: OldVNodeTypeWithNone, n2: NewVNodeType, container: ContainerType, parentInstance: Component, anchor: AnchorType) {
     // n1 存在，update 逻辑
     if (n1) {
       patchElement(n1, n2, parentInstance, anchor)
@@ -63,17 +72,18 @@ export function createRenderer(options) {
     }
   }
 
-  function patchElement(n1, n2, parentInstance, anchor) {
+  function patchElement(on1: OldVNodeType, n2: NewVNodeType, parentInstance: Component, anchor: AnchorType) {
+    const n1 = on1 as VNode
     const oldProps = n1.props || EMPTY_OBJ
     const newProps = n2.props || EMPTY_OBJ
     const el = (n2.el = n1.el)
-    patchProps(el, oldProps, newProps)
+    patchProps(el, (oldProps as Props), (newProps as Props))
     patchChildren(n1, n2, el, parentInstance, anchor)
   }
 
-  function patchChildren(n1, n2, container, parentInstance, anchor) {
+  function patchChildren(on1: OldVNodeType, n2: NewVNodeType, container: ContainerType, parentInstance: Component, anchor: AnchorType) {
     console.log('patchChildren')
-
+    const n1 = on1 as VNode
     const prevShapeFlag = n1.shapeFlags
     const shapeFlag = n2.shapeFlags
     const c1 = n1.children
@@ -85,28 +95,28 @@ export function createRenderer(options) {
       if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
         // 如果老的 shapeFlag 是 array_children，需要做两件事
         // 1. 清空原有 children
-        unmountChildren(n1.children)
+        unmountChildren((n1.children as VNode[]))
         // 2. 挂载文本 children
       }
       if (c1 !== c2) {
-        hostSetElementText(n2.el, c2)
+        hostSetElementText((n2.el as HTMLElement), (c2 as string))
       }
     } else {
       if (prevShapeFlag & ShapeFlags.TEXT_CHILDREN) {
         // 如果是 text -> array
         // 1. 清空 text
-        hostSetElementText(n1.el, '')
+        hostSetElementText((n1.el as HTMLElement), '')
         // 2. mountChildren
         mountChildren(c2, container, parentInstance, anchor)
       } else {
         // array -> array
-        patchKeyedChildren(c1, c2, container, parentInstance, anchor)
+        patchKeyedChildren((c1 as VNode[]), (c2 as VNode[]), container, parentInstance, anchor)
       }
     }
   }
 
-  function patchKeyedChildren(c1, c2, container, parentInstance, anchor) {
-    let l2 = c2.length
+  function patchKeyedChildren(c1: VNode[], c2: VNode[], container: ContainerType, parentInstance: Component, anchor: AnchorType) {
+    let l2 = c2!.length
     // 声明三个指针，e1 是老节点最后一个元素，e2 是新节点最后一个元素，i 是当前对比的元素
     let e1 = c1.length - 1
     let e2 = l2 - 1
@@ -185,7 +195,7 @@ export function createRenderer(options) {
           hostRemove(prevChild.el)
           continue
         }
-        let newIndex
+        let newIndex: number | undefined
         // 如果当前老的子节点的 key 不是空的
         if (prevChild.key !== null) {
           // 就去映射表中找到新的对应的 newIndex
@@ -244,7 +254,7 @@ export function createRenderer(options) {
     }
   }
 
-  function unmountChildren(children) {
+  function unmountChildren(children: VNode[]) {
     for (let i = 0; i < children.length; i++) {
       // 遍历 children，同时执行 remove 逻辑
       // 由于这里涉及到元素渲染的实际操作，所以我们要抽离出去作为一个API
@@ -252,10 +262,10 @@ export function createRenderer(options) {
     }
   }
 
-  function patchProps(el, oldProps, newProps) {
+  function patchProps(el: NormalNode, oldProps: Props, newProps: Props) {
     if (oldProps === newProps) return
     // 情况1: old !== new 这个走更新的逻辑
-    for (const propKey of Reflect.ownKeys(newProps)) {
+    for (const propKey of Object.keys(newProps)) {
       const oldProp = oldProps[propKey]
       const newProp = newProps[propKey]
       if (oldProp !== newProp) {
@@ -267,7 +277,7 @@ export function createRenderer(options) {
     // 情况2 在 hostPatchProp 内部处理
     // 情况3: old 存在，new 不存在，这个也走删除的逻辑
     if (oldProps !== EMPTY_OBJ) {
-      for (const propKey of Reflect.ownKeys(oldProps)) {
+      for (const propKey of Object.keys(oldProps)) {
         if (!(propKey in newProps)) {
           hostPatchProp(el, propKey, undefined, oldProps[propKey])
         }
@@ -275,18 +285,18 @@ export function createRenderer(options) {
     }
   }
 
-  function mountElement(n2, container, parentInstance, anchor) {
+  function mountElement(n2: VNode, container: NormalNode, parentInstance: Component, anchor: AnchorType) {
     // 此函数就是用来将 vnode -> domEl 的
     const { type: domElType, props, children, shapeFlags } = n2
     // 创建 dom
-    const domEl = (n2.el = hostCreateElement(domElType))
+    const domEl = (n2.el = hostCreateElement((domElType as string)))
     // 加入 attribute
     for (const prop in props) {
-      hostPatchProp(domEl, prop, props[prop])
+      hostPatchProp(domEl, prop, (props as Props)[prop])
     }
     // 这里需要判断children两种情况，string or array
     if (shapeFlags & ShapeFlags.TEXT_CHILDREN) {
-      domEl.textContent = children
+      domEl!.textContent = (children as string)
     } else if (shapeFlags & ShapeFlags.ARRAY_CHILDREN) {
       mountChildren(n2.children, domEl, parentInstance, anchor)
     }
@@ -294,13 +304,13 @@ export function createRenderer(options) {
     hostInsert(domEl, container, anchor)
   }
 
-  function mountChildren(children, container, parentInstance, anchor) {
-    children.forEach(vnode => {
+  function mountChildren(children: VNode["children"], container: NormalNode, parentInstance: Component, anchor: AnchorType) {
+    (children as VNode[]).forEach(vnode => {
       patch(null, vnode, container, parentInstance, anchor)
     })
   }
 
-  function processComponent(n1, n2, container, parentInstance, anchor) {
+  function processComponent(n1: OldVNodeTypeWithNone, n2: NewVNodeType, container: NormalNode, parentInstance: Component, anchor: AnchorType) {
     if (n1) {
       // update component
       updateComponent(n1, n2)
@@ -310,19 +320,19 @@ export function createRenderer(options) {
     }
   }
 
-  function updateComponent(n1, n2) {
-    const instance = (n2.component = n1.component)
+  function updateComponent(n1: OldVNodeType, n2: NewVNodeType) {
+    const instance = (n2.component = (n1 as VNode).component) as Component
     // instance 挂载最新的虚拟节点
     if (shouldUpdateComponent(n1, n2)) {
       instance.next = n2
-      instance.update()
+      instance!.update()
     } else {
-      n2.el = n1.el
+      n2.el = (n1 as VNode).el
       instance.vnode = n2
     }
   }
 
-  function mountComponent(vnode, container, parentInstance, anchor) {
+  function mountComponent(vnode: VNode, container: NormalNode, parentInstance: Component, anchor: AnchorType) {
     // 通过 vnode 获取组件实例
     const instance = (vnode.component = createComponentInstance(
       vnode,
@@ -334,7 +344,7 @@ export function createRenderer(options) {
     setupRenderEffect(instance, vnode, container, anchor)
   }
 
-  function setupRenderEffect(instance, vnode, container, anchor) {
+  function setupRenderEffect(instance: Component, vnode: VNode, container: NormalNode, anchor: AnchorType) {
     instance.update = effect(
       () => {
         if (instance.isMounted) {
@@ -349,7 +359,7 @@ export function createRenderer(options) {
 
           const subTree = renderComponentRoot(instance)
           vnode.el = subTree.el
-          const preSubTree = instance.subTree
+          const preSubTree = (instance.subTree as VNode)
           instance.subTree = subTree
           patch(preSubTree, subTree, container, instance, anchor)
         } else {
@@ -374,9 +384,9 @@ export function createRenderer(options) {
   }
 }
 
-function updateComponentPreRender(instance, nextVNode) {
-  instance.vnode = nextVNode
-  instance.props = nextVNode.props
+function updateComponentPreRender(instance: Component, nextVNode: VNode | null) {
+  instance.vnode = nextVNode as VNode
+  instance.props = (nextVNode as VNode).props
   nextVNode = null
 }
 

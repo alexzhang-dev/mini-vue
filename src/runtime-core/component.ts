@@ -4,23 +4,46 @@ import { emit } from './componentEmit'
 import { initProps } from './componentProps'
 import { componentPublicInstanceProxyHandlers } from './componentPublicInstance'
 import { initSlots } from './componentSlots'
+import type { VNode } from './vnode'
 
-export function createComponentInstance(vnode, parent) {
+type SlotsType = {
+  default: (...args: unknown[]) => void
+  [key: string]: (...args: unknown[]) => void
+}
+
+export type Component = {
+  vnode: VNode
+  type: VNode["type"]
+  setupState: Record<string, unknown>
+  props: VNode["props"]
+  emit: (...args: unknown[]) => void
+  slots: SlotsType
+  provides: Record<string, unknown>
+  parent: Component
+  isMounted: boolean
+  next: VNode | null
+  subTree: VNode | {}
+  update?: any
+}
+
+export function createComponentInstance(vnode: VNode, parent: Component) {
   // 这里返回一个 component 结构的数据
-  const component = {
+  const component: Component = {
     vnode,
     type: vnode.type,
     setupState: {},
     props: {},
-    emit: () => {},
-    slots: {},
+    emit: () => { },
+    slots: {
+      default: () => { }
+    },
     provides: parent ? parent.provides : {},
     parent,
     isMounted: false,
     next: null,
     subTree: {},
   }
-  component.emit = emit.bind(null, component) as any
+  component.emit = emit.bind(null, component)
   return component
 }
 

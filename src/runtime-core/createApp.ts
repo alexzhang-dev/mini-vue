@@ -1,9 +1,10 @@
-import { createVNode } from './vnode'
+import { createVNode, } from './vnode'
+import type { VNode } from './vnode'
 
-export function createAppAPI(renderer, selector) {
-  return function createApp(rootComponent) {
+export function createAppAPI(renderer, selector: (s: string) => void) {
+  return function createApp(rootComponent: VNode) {
     return {
-      mount(rootContainer) {
+      mount(rootContainer: string) {
         // 在 vue3 中，会将 rootComponent 转为一个虚拟节点 VNode
         // 后续所有的操作都会基于虚拟节点
         // 这里就调用了一个 createVNode 的 API 将 rootComponent 转换为一个虚拟节点
