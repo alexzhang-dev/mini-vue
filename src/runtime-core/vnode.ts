@@ -3,14 +3,14 @@ import { ShapeFlags } from '../shared/ShapeFlags'
 export const Fragment = Symbol('Fragment')
 export const TextNode = Symbol('TextNode')
 
-type VNodeType = string | typeof Fragment | typeof TextNode
+export type VNodeType = string | typeof Fragment | typeof TextNode
 
-type Props = {
+export type Props = {
   key?: number | string | null
   [key: string]: string | number | boolean | symbol | null | undefined
 }
 
-type VNode = {
+export type VNode = {
   readonly type: VNodeType
   props: Props
   children: VNode[] | string | undefined
