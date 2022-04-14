@@ -319,10 +319,10 @@ export function createRenderer(options: RendererOptions<NormalNode>) {
     }
   }
 
-  function updateComponent(n1: OldVNodeType, n2: NewVNodeType) {
+  function updateComponent(n1: OldVNodeTypeWithNone, n2: NewVNodeType) {
     const instance = (n2.component = (n1 as VNode).component) as Component
     // instance 挂载最新的虚拟节点
-    if (shouldUpdateComponent(n1, n2)) {
+    if (shouldUpdateComponent((n1 as VNode), n2)) {
       instance.next = n2
       instance!.update()
     } else {
