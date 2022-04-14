@@ -19,6 +19,9 @@ export type VNode = {
   component: Component | null
   key: VNodeProps["key"]
   shapeFlags: ShapeFlags
+  setup?: (...args: unknown[]) => Record<string, unknown> | null
+  template?: "",
+  render?: (...args: unknown[]) => VNode
 }
 
 export function createVNode<T extends VNodeProps>(type: VNodeType, props?: T, children?: VNode[] | string | undefined) {
